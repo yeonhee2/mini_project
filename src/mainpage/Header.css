@@ -1,0 +1,30 @@
+.Header {
+  background: lightgrey;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.home-logo {
+  padding-left: 45px;
+}
+
+nav {
+  width: 75%;
+}
+
+.nav-menu {
+  margin: 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+img {
+  margin: 5px;
+  height: 35px;
+}

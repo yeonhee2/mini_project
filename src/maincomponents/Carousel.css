@@ -1,0 +1,56 @@
+.Carousel{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+  overflow: hidden;
+  width: 600px;
+  transition: all 1s ;
+}
+
+.wrapper {
+  width: 1fr;
+  display: flex; 
+}
+
+.c1 {
+transform: translateX(0px);
+}
+.c2{
+  transform: translateX(-600px);
+}
+
+.c3{
+  transform: translateX(-1200px);
+}
+
+.c4{
+  transform: translateX(-1800px);
+}
+
+.c5{
+  transform: translateX(-2400px);
+}
+
+.c6{
+  transform: translateX(-3000px);
+}
+
+.box > img {
+  margin: 0;
+  width: 600px;
+  height: 400px;
+}
+
+button {
+  border: none;
+  background: none;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.pre, .next {
+  font-size: 100px;  
+}
+
+.btn1, .btn2, .btn3, .btn4, .btn5, .btn6 {
+  font-size: 50px;
+}
