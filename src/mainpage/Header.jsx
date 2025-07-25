@@ -1,12 +1,20 @@
+import { useState } from 'react'
 import './Header.css'
 
 function Header() {
+  const[isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="Header">  
       <div className="home-logo">
         <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/logoimages/JYP.png`}></img>
       </div>
-      <nav>
+
+      <button className='menu-toggle' onClick={ () => setIsOpen(!isOpen)}>
+        ≡
+      </button>
+
+      <nav className={isOpen ? 'open' : ''}>
         <ul className="nav-menu">
           <li><img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/logoimages/DAY6.png`}></img></li>
           <li><img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/logoimages/TWICE.png`}></img></li>

@@ -7,7 +7,6 @@ import MainPage from './mainpage/MainPage'
 
 function App() {
   const [artist, setArtist] = useState([]);
-  const [members, setMembers] =useState([]);
 
   useEffect( () => {
     axios.get('https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/artist.json')
@@ -18,17 +17,14 @@ function App() {
       console.log(error)
      })
   }, [])
-
-
- 
+  
   return (
     <>
       <Header />
 
       <Routes>
-        <Route path='/' element={<MainPage />} />
+        <Route path='/' element={<MainPage artist={artist}/>} />
       </Routes>
-      
     </>
   )
 }

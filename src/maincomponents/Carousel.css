@@ -1,56 +1,133 @@
+.container {
+  background: #f5cede;
+  height: 45vh;
+}
+
 .Carousel{
-  margin: 0;
+  margin: auto;
   padding: 0;
   box-sizing: border-box; 
   overflow: hidden;
-  width: 600px;
-  transition: all 1s ;
+  width: 50vw;
+  position: relative;
+  top: 5%;
 }
 
 .wrapper {
-  width: 1fr;
+  width: 50vw;
   display: flex; 
+  
+}
+
+.tran {
+transition: all 2s ;
 }
 
 .c1 {
-transform: translateX(0px);
+transform: translateX(0vw);
 }
 .c2{
-  transform: translateX(-600px);
+  transform: translateX(-50vw);
 }
 
 .c3{
-  transform: translateX(-1200px);
+  transform: translateX(-100vw);
 }
 
 .c4{
-  transform: translateX(-1800px);
+  transform: translateX(-150vw);
 }
 
 .c5{
-  transform: translateX(-2400px);
+  transform: translateX(-200vw);
 }
 
 .c6{
-  transform: translateX(-3000px);
+  transform: translateX(-250vw);
 }
 
+.c7 {
+  transform: translateX(-300vw);
+}
 .box > img {
   margin: 0;
-  width: 600px;
-  height: 400px;
+  width: 50vw;;
+  height: 40vh;
 }
 
 button {
   border: none;
   background: none;
-  color: rgba(0, 0, 0, 0.2);
+  color: rgba(103, 103, 148,0.3);
+  margin: auto;
 }
 
 .pre, .next {
-  font-size: 100px;  
+  font-size: 6.55rem; 
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
 }
 
+.pre {
+  left: 1%;
+}
+
+.next {
+  right: 1%;
+}
+
+
 .btn1, .btn2, .btn3, .btn4, .btn5, .btn6 {
-  font-size: 50px;
+  font-size: 2.5rem;
+  top: 90%;
+  position: absolute;
+}
+
+.btn1 {
+  left: 30%;
+}
+
+.btn2 {
+  left: 37%;
+}
+
+.btn3 {
+  left: 44%;
+}
+
+.btn4 {
+  left: 51%;
+}
+
+.btn5 {
+  left: 58%;
+}
+
+.btn6 {
+  left: 65%;
+}
+
+@media (max-width: 768px) {
+  .container {  
+    height: 50vh;
+  }
+
+  .Carousel {
+    height: 50vh; /* 모바일에서는 약간 더 크게 */
+  }
+
+  .pre, .next {
+    font-size: 5rem; 
+    position: absolute;
+    top: 40%;
+    transform: translateY(-40%);
+    z-index: 10;
+  }
+  .btn1, .btn2, .btn3, .btn4, .btn5, .btn6 {
+    font-size: 1.5rem;
+    top: 74%;
+    position: absolute;
+  }
 }
