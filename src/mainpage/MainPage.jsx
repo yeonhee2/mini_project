@@ -1,11 +1,11 @@
 import Calendars from "../maincomponents/Calendars"
 import Carousel from "../maincomponents/Carousel"
 
-function MainPage({artist}) {
+function MainPage({artist, album, concert}) {
   return(
     <div>
       <Carousel />
-      <Calendars artist={artist}/>
+      <Calendars artist={artist} album={album} concert={concert}/>
     </div>
   )
 }

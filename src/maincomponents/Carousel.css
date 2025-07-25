@@ -58,7 +58,7 @@ transform: translateX(0vw);
 button {
   border: none;
   background: none;
-  color: rgba(103, 103, 148,0.3);
+  /* color: rgba(103, 103, 148,0.3); */
   margin: auto;
 }
 
@@ -108,6 +108,17 @@ button {
 .btn6 {
   left: 65%;
 }
+
+/* .active-button {
+  color: rgba(103, 103, 148, 1); 강조 색상
+  font-weight: bold;
+}
+
+.inactive-button {
+  
+  color: rgba(103, 103, 148,0.3);
+} */
+
 
 @media (max-width: 768px) {
   .container {  

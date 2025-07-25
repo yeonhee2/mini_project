@@ -5,10 +5,12 @@ import interactionPlugin from "@fullcalendar/interaction"; // 클릭 이벤트
 import momentTimezonePlugin from "@fullcalendar/moment-timezone" // 시간대 플러그인
 import './Calendars.css'
 import data from "../utill/date";
+import albums from "../utill/albumdata,js";
+import concerts from "../utill/concertdata";
 
-function Calendars({artist}) {
+function Calendars({artist, album, concert}) {
 
-  const event = data(artist)
+  const event = [...data(artist),...albums(album),...concerts(concert)]
   return(
     <div className="Calendars">
       <FullCalendar

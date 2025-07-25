@@ -49,22 +49,22 @@ function Carousel() {
         <button className='btn1' onClick={() => {
           setSlide(1)
         }}>&nbsp;•&nbsp;</button>
-        <button className='btn2'onClick={() => {
+        <button className='btn2' onClick={() => {
           setSlide(2)
         }}>&nbsp;•&nbsp;</button>
-        <button className='btn3'onClick={() => {
+        <button className='btn3' onClick={() => {
           setSlide(3)
         }}>&nbsp;•&nbsp;</button>
-        <button className='btn4'onClick={() => {
+        <button className='btn4' onClick={() => {
           setSlide(4)
         }}>&nbsp;•&nbsp;</button>
-        <button className='btn5'onClick={() => {
+        <button className='btn5' onClick={() => {
           setSlide(5)
         }}>&nbsp;•&nbsp;</button>
-        <button className='btn6'onClick={() => {
+        <button className='btn6' onClick={() => {
           setSlide(6)
         }}>&nbsp;•&nbsp;</button>
-        <button className='next'onClick={ () => {
+        <button className='next' onClick={ () => {
           setSlide(slide+1)
         }}> &gt; </button>
       </div>
