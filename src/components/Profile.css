@@ -1,53 +1,44 @@
 .Profile {
-  padding-top: 20px;
   display: grid;
-  width: 100vw;
-  grid-template-columns: repeat(auto-fill,20vw);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
   padding: 20px;
-  margin: auto;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 auto;
 }
 
 a{
   color: black
 }
 
-.member-box img {
-  display: block;
-  height: 15vh;
-  margin: auto;
+.member-box {
+  border: 1px solid lightgray;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
 }
 
-.member-box{
- border: 1px solid lightgray;
- padding: 5px;
- margin-right: 5px;
- margin-bottom: 5px;
- 
+.member-box img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  aspect-ratio: 3/4;
+  border-radius: 6px;
 }
 
 .member-box h3 {
-  text-align: center;
+  font-size: 1rem;
+  margin: 5px 0;
 }
 
-@media (max-width: 476px) {
+.member-box p {
+  font-size: 0.9rem;
+  margin: 2px 0;
+}
+
+@media (max-width: 768px) {
   .Profile {
-    grid-template-columns: repeat(auto-fill,30vw);
-    grid-auto-rows: 25vh;
-    gap: 0px;
-    padding: 20px;
+    grid-template-columns: repeat(3, 1fr); /* 모바일: 3개씩 한 줄 */
   }
-  .member-box img {
-    display: block;
-    height: 10vh;
-    margin: auto;
-  }
-
-  .member-box h3 {
-    font-size: 1em;
-  }
-
-  .member-box p {
-    font-size: 0.9em;
-  }
-
 }
