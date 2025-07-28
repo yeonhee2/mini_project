@@ -6,7 +6,7 @@ function albums(album) {
         title: `${album[i].albumname} 📀`,
         date: album[i].Releasedate,
         color: album[i].color,
-        textColor: 'wihte'
+        textColor: album[i].fontcolor
     })
   }
 

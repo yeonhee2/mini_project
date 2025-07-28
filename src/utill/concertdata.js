@@ -8,7 +8,7 @@ function concerts(concert) {
         end: concert[i].end,
         allDay: true,
         color: concert[i].color,
-        textColor: 'wihte'
+        textColor: concert[i].fontcolor
     })
   }
 

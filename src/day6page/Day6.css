@@ -1,0 +1,36 @@
+.Day6 {
+  text-decoration: none;
+  box-sizing: border-box; 
+  position: relative;
+}
+.video {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.sns {
+  margin: 20px;
+
+}
+.memu {
+  list-style: none;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  width: 100vw;
+  text-align: center;
+  font-size: 1.1em;
+  height: 4vh;
+}
+
+.memu li{
+  display: inline-block;
+  width: 26vw;
+  margin: 6px auto;
+  border-right: 1px dotted black;
+  vertical-align: middle;
+}
+
+.memu > li:nth-child(3) {
+  border-right: 0;
+}

@@ -1,0 +1,53 @@
+.Profile {
+  padding-top: 20px;
+  display: grid;
+  width: 100vw;
+  grid-template-columns: repeat(auto-fill,20vw);
+  padding: 20px;
+  margin: auto;
+}
+
+a{
+  color: black
+}
+
+.member-box img {
+  display: block;
+  height: 15vh;
+  margin: auto;
+}
+
+.member-box{
+ border: 1px solid lightgray;
+ padding: 5px;
+ margin-right: 5px;
+ margin-bottom: 5px;
+ 
+}
+
+.member-box h3 {
+  text-align: center;
+}
+
+@media (max-width: 476px) {
+  .Profile {
+    grid-template-columns: repeat(auto-fill,30vw);
+    grid-auto-rows: 25vh;
+    gap: 0px;
+    padding: 20px;
+  }
+  .member-box img {
+    display: block;
+    height: 10vh;
+    margin: auto;
+  }
+
+  .member-box h3 {
+    font-size: 1em;
+  }
+
+  .member-box p {
+    font-size: 0.9em;
+  }
+
+}
