@@ -58,7 +58,7 @@ transform: translateX(0vw);
 button {
   border: none;
   background: none;
-  /* color: rgba(103, 103, 148,0.3); */
+  color: rgba(103, 103, 148,0.3);
   margin: auto;
 }
 
