@@ -1,0 +1,26 @@
+.Calendars {
+  padding-top: 20px;
+  width: 70vh;
+  height: 45vh;
+  .fc {
+    width: 100%;
+    font-size: 0.8em;
+  }
+  .fc-event-title {
+  font-size: 10px;
+  font-weight: bold;
+  }
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .Calendars {
+    width: 60vh;
+    height: 30vh;
+    .fc {
+      width: 90%;
+      font-size: 0.5em;
+    }
+   
+  }
+}
