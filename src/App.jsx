@@ -6,6 +6,7 @@ import axios from 'axios'
 import MainPage from './mainpage/MainPage'
 import Day6 from './day6page/Day6'
 import Twice from './twicepage/Twice'
+import Straykids from './straykidspage/Straykids'
 
 function App() {
   const [artist, setArtist] = useState([]);
@@ -63,6 +64,7 @@ function App() {
         <Route path='/' element={<MainPage artist={artist} album={album} concert={concert}/>} />
         <Route path='/day6/20150907' element={<Day6 group={artist[0]} performance={concert[0]} suggest={artistPlayList[0]} album={album[0]} />} />
         <Route path='/twice/20151020' element={<Twice group={artist[1]} performance={concert[1]} suggest={artistPlayList[1]} album={album[1]}/>}/>
+        <Route path='/straykids/20180325' element={<Straykids group={artist[2]} performance={concert[2]} suggest={artistPlayList[2]} album={album[2]}/>}/>
       </Routes>
     </>
   )
