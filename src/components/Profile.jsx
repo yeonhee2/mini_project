@@ -9,7 +9,7 @@ function Profile({group}) {
         group.member.map((data,i) => {
           return(
             <div className="member-box" style={{background:data.color, color: data.fontcolor}} key={i}>
-              <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/DAY6images/${data.name}.jpg`} ></img>
+              <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/${group.group}images/${data.name}.jpg`} ></img>
               <h3>{data.name}</h3>
               <p>{data.age}세 (만 나이)</p>
               <p>{data.birthday}</p>
