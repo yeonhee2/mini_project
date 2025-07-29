@@ -1,4 +1,3 @@
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Profile.css'
 import { faInstagram, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons'
@@ -16,19 +15,19 @@ function Profile({group}) {
               <p>{data.birthday}</p>
               { data.instagram === " " ? " "
                 : 
-                <a href={data.instagram}><FontAwesomeIcon icon={faInstagram} /></a>
+                <a href={data.instagram} target="_blank"><FontAwesomeIcon icon={faInstagram} /></a>
               }
               { data.yutube === " " ? " "
                 :
-                <a href={data.yutube}><FontAwesomeIcon icon={faYoutube} /></a>
+                <a href={data.yutube} target="_blank"><FontAwesomeIcon icon={faYoutube} /></a>
               }
               { data.x === " " ? " "
                 : 
-                <a href={data.x}><FontAwesomeIcon icon={faXTwitter} /></a>
+                <a href={data.x} target="_blank"><FontAwesomeIcon icon={faXTwitter} /></a>
               }
               { data.x2 === " " ? " "
                 :              
-                <a href={data.x2}><FontAwesomeIcon icon={faXTwitter}/>2</a>
+                <a href={data.x2} target="_blank"><FontAwesomeIcon icon={faXTwitter}/>2</a>
               }
 
             </div>

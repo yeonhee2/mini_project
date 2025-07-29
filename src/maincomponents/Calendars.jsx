@@ -5,14 +5,34 @@ import interactionPlugin from "@fullcalendar/interaction"; // 클릭 이벤트
 import momentTimezonePlugin from "@fullcalendar/moment-timezone" // 시간대 플러그인
 import './Calendars.css'
 import data from "../utill/date";
-import albums from "../utill/albumdata,js";
+import albums from "../utill/albumdata.js";
 import concerts from "../utill/concertdata";
+import { useEffect, useRef } from "react";
 
 function Calendars({artist, album, concert}) {
 
+  const calendarRef = useRef(null);
+  
+    useEffect(() => {
+      const headerEl = calendarRef.current?.querySelector('.fc-header-toolbar');
+      if(headerEl) {
+        headerEl.style.backgroundColor = '#0047AB';
+        headerEl.style.color = '#fff';
+      }
+  
+      const buttons = calendarRef.current?.querySelectorAll('.fc-button');
+      if(buttons) {
+        buttons.forEach((btn) => {
+          btn.style.backgroundColor = '#0047AB';
+          btn.style.borderColor = '#0047AB';
+          btn.style.color = '#fff';
+        })
+      }
+    }, [ ])
+
   const event = [...data(artist),...albums(album),...concerts(concert)]
   return(
-    <div className="Calendars">
+    <div ref={calendarRef} style={{marginBottom: '40px'}} className="Calendars">
       <FullCalendar
         plugins={[ dayGridPlugin,timeGridPlugin,momentTimezonePlugin,interactionPlugin ]}
         headerToolbar={{
@@ -25,7 +45,7 @@ function Calendars({artist, album, concert}) {
         selectable = {true} // 선택 가능 여부
         selectMirror = {true} // timegrid 뷰에서 자리 표시자 여부
         dayMaxEvents = {true} // 한 셀에 최대 이벤트 표시 여부
-        height={400}
+        height={500}
         events={event}
         />
     </div>

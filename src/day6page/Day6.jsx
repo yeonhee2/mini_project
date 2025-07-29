@@ -4,8 +4,10 @@ import './Day6.css'
 import { faInstagram, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faShop, faUsersRectangle } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
+import PlayList from "../components/PlayList"
+import Schedule from "../components/Schedule"
 
-function Day6( {group} ) {
+function Day6( {group, performance, suggest, album} ) {
   const [activeTab, setActiveTab] = useState("profile");
   
   return (
@@ -19,11 +21,11 @@ function Day6( {group} ) {
           allowFullScreen
         ></iframe>
         <div className="sns">
-          <a href={group.instagram}><FontAwesomeIcon icon={faInstagram} size="2x" /></a>
-          <a href={group.yutube}><FontAwesomeIcon icon={faYoutube} size="2x"/></a>
-          <a href={group.x}><FontAwesomeIcon icon={faXTwitter} size="2x"/></a>
-          <a href={group.shop}><FontAwesomeIcon icon={faShop} size="2x"/></a>
-          <a href={group.fans}><FontAwesomeIcon icon={faUsersRectangle} size="2x"/></a>
+          <a href={group.instagram} target="_blank"><FontAwesomeIcon icon={faInstagram} size="2x" /></a>
+          <a href={group.yutube} target="_blank"><FontAwesomeIcon icon={faYoutube} size="2x"/></a>
+          <a href={group.x} target="_blank"><FontAwesomeIcon icon={faXTwitter} size="2x"/></a>
+          <a href={group.shop} target="_blank"><FontAwesomeIcon icon={faShop} size="2x"/></a>
+          <a href={group.fans} target="_blank"><FontAwesomeIcon icon={faUsersRectangle} size="2x"/></a>
         </div>
       </div>
 
@@ -37,8 +39,8 @@ function Day6( {group} ) {
 
       <div className="content">
         {activeTab === "profile" && <Profile group={group} />}
-        {activeTab === "schedule" && <p>스케줄 컴포넌트 준비 중...</p>}
-        {activeTab === "playlist" && <p>추천 플레이리스트 준비 중...</p>}
+        {activeTab === "schedule" && <Schedule performance={performance} group={group} album={album}/>}
+        {activeTab === "playlist" && <PlayList playlist={suggest} /> }
       </div>
       
     </div>
