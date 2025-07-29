@@ -8,6 +8,7 @@ import Day6 from './day6page/Day6'
 import Twice from './twicepage/Twice'
 import Straykids from './straykidspage/Straykids'
 import Itzy from './itzypage/Itzy'
+import Nmixx from './nmixxpage/Nmixx'
 
 function App() {
   const [artist, setArtist] = useState([]);
@@ -67,6 +68,7 @@ function App() {
         <Route path='/twice/20151020' element={<Twice group={artist[1]} performance={concert[1]} suggest={artistPlayList[1]} album={album[1]}/>}/>
         <Route path='/straykids/20180325' element={<Straykids group={artist[2]} performance={concert[2]} suggest={artistPlayList[2]} album={album[2]}/>}/>
         <Route path='/itzy/20190212' element={<Itzy group={artist[3]} performance={concert[3]} suggest={artistPlayList[3]} album={album[3]}/>}/>
+        <Route path='/nmixx/20220222' element={<Nmixx group={artist[4]} performance={concert[4]} suggest={artistPlayList[4]} album={album[4]}/>}/>
       </Routes>
     </>
   )
