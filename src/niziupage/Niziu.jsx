@@ -1,10 +1,10 @@
 import ArtistPage from "../components/ArtistPage"
 
-function Nmixx({group, performance, suggest, album}) {
+function NiziU ( {group, performance, suggest, album} ) {
 
   return (
     <ArtistPage group={group} performance={performance} suggest={suggest} album = {album} />
-  )  
+  )
 }
 
-export default Nmixx
+export default NiziU
