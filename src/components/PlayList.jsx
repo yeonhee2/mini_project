@@ -14,8 +14,8 @@ function PlayList({playlist}) {
                 <table>
                   <thead>
                     <tr>
-                      <th style={{width:'200px'}}>가수</th>
-                      <th style={{width:'320px'}}>제목</th>
+                      <th style={{width:'250px'}}>가수</th>
+                      <th style={{width:'270px'}}>제목</th>
                       <th>유튜브로 듣기</th>
                     </tr>
                   </thead>

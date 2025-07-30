@@ -1,4 +1,4 @@
-.Nmixx {
+.ArtistPage {
   text-decoration: none;
   box-sizing: border-box; 
   padding-top: 5px;
@@ -32,7 +32,7 @@
   margin: 10px 0;
 }
 
-.nmixx-nav {
+.artistPage-nav {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -42,7 +42,7 @@
   margin-bottom: 10px;
 }
 
-.nmixx-nav .menu {
+.artistPage-nav .menu {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,7 +58,7 @@
   flex-wrap: wrap;
 }
 
-.nmixx-nav .menu li {
+.artistPage-nav .menu li {
   cursor: pointer;
   font-weight: bold;
   padding: 6px 12px;
@@ -73,11 +73,11 @@
   flex: none;
 }
 
-.nmixx-nav .menu li:last-child {
+.artistPage-nav .menu li:last-child {
   border-right: none;
 }
 
-.nmixx-nav .menu li:hover {
+.artistPage-nav .menu li:hover {
   background-color: #f0f0f0;
 }
 
@@ -94,17 +94,17 @@
     gap: 8px;
     margin-bottom: 0;
   }
-  .nmixx-nav .menu {
+  .artistPage-nav .menu {
     flex-wrap: nowrap;             
     overflow-x: auto;  
     padding: 2px 0;       
   }
 
-  .nmixx-nav {
+  .artistPage-nav {
     margin-top: 0;
   }
 
-  .nmixx-nav .menu li {
+  .artistPage-nav .menu li {
     flex: none;
     border-bottom: none;
     border-right: 1px dotted #888;
@@ -113,10 +113,10 @@
     padding: 5px 8px;
   }
 
-  .nmixx-nav .menu li:last-child {
+  .artistPage-nav .menu li:last-child {
     border-right: none;
   }
-   .content {
+  .content {
     margin-top: 40px; /* 모바일에서만 탭과 콘텐츠 사이 여백 추가 */
   }
 }

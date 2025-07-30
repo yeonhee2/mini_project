@@ -9,6 +9,7 @@ import Twice from './twicepage/Twice'
 import Straykids from './straykidspage/Straykids'
 import Itzy from './itzypage/Itzy'
 import Nmixx from './nmixxpage/Nmixx'
+import NiziU from './niziupage/Niziu'
 
 function App() {
   const [artist, setArtist] = useState([]);
@@ -69,6 +70,7 @@ function App() {
         <Route path='/straykids/20180325' element={<Straykids group={artist[2]} performance={concert[2]} suggest={artistPlayList[2]} album={album[2]}/>}/>
         <Route path='/itzy/20190212' element={<Itzy group={artist[3]} performance={concert[3]} suggest={artistPlayList[3]} album={album[3]}/>}/>
         <Route path='/nmixx/20220222' element={<Nmixx group={artist[4]} performance={concert[4]} suggest={artistPlayList[4]} album={album[4]}/>}/>
+        <Route path='/niziu/20201202' element={<NiziU group={artist[5]} performance={concert[5]} suggest={artistPlayList[5]} album={album[5]}/>} />
       </Routes>
     </>
   )
