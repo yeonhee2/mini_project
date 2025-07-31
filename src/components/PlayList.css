@@ -14,15 +14,22 @@
  padding-bottom: 5px; 
 }
 
+.PlayList .inventory-name td {
+  font-size: 0.8em;
+}
+
 @media (max-width: 768px) {
   .PlayList .inventory-name h3  {
     font-size: 0.9em;
     margin-top: 20px;
   }
   .PlayList .inventory-name th {
-    font-size: 0.7em;
+    font-size: 0.5em;
+  }
+  .PlayList .inventory-name th:nth-last-child(1) {
+    width: 60px;
   }
   .PlayList .inventory-name td {
-    font-size: 0.5em;
+    font-size: 0.4em;
   }
 }

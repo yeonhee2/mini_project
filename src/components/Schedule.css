@@ -24,9 +24,11 @@
 
 @media (max-width: 768px) {
   .Schedule  {
-    margin-top: 60px;
+    margin-top: 30px;
     width: 100%;
     height: 30vh;
+    display: flex;
+    justify-content: center;
     .fc {
       width: 90%;
       font-size: 0.5em;

@@ -1,124 +1,26 @@
 .container {
-  background: #f5cede;
-  height: 45vh;
+  height: 50vh;
+  margin-top: 20px;
+  background-color: #ff91b6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .Carousel{
-  margin: auto;
-  padding: 0;
   box-sizing: border-box; 
-  overflow: hidden;
+  overflow: visible;
   width: 50vw;
   position: relative;
-  top: 5%;
 }
 
-.wrapper {
-  width: 50vw;
-  display: flex; 
-  
-}
-
-.tran {
-transition: all 2s ;
-}
-
-.c1 {
-transform: translateX(0vw);
-}
-.c2{
-  transform: translateX(-50vw);
-}
-
-.c3{
-  transform: translateX(-100vw);
-}
-
-.c4{
-  transform: translateX(-150vw);
-}
-
-.c5{
-  transform: translateX(-200vw);
-}
-
-.c6{
-  transform: translateX(-250vw);
-}
-
-.c7 {
-  transform: translateX(-300vw);
-}
 .box > img {
   margin: 0;
   width: 50vw;;
   height: 40vh;
 }
-
-button {
-  border: none;
-  background: none;
-  color: rgba(103, 103, 148,0.3);
-  margin: auto;
-}
-
-.pre, .next {
-  font-size: 6.55rem; 
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-.pre {
-  left: 1%;
-}
-
-.next {
-  right: 1%;
-}
-
-
-.btn1, .btn2, .btn3, .btn4, .btn5, .btn6 {
-  font-size: 2.5rem;
-  top: 90%;
-  position: absolute;
-}
-
-.btn1 {
-  left: 30%;
-}
-
-.btn2 {
-  left: 37%;
-}
-
-.btn3 {
-  left: 44%;
-}
-
-.btn4 {
-  left: 51%;
-}
-
-.btn5 {
-  left: 58%;
-}
-
-.btn6 {
-  left: 65%;
-}
-
-/* .active-button {
-  color: rgba(103, 103, 148, 1); 강조 색상
-  font-weight: bold;
-}
-
-.inactive-button {
-  
-  color: rgba(103, 103, 148,0.3);
-} */
-
 
 @media (max-width: 768px) {
   .container {  
@@ -127,18 +29,7 @@ button {
 
   .Carousel {
     height: 50vh; /* 모바일에서는 약간 더 크게 */
+    margin-top: 70px;
   }
 
-  .pre, .next {
-    font-size: 5rem; 
-    position: absolute;
-    top: 40%;
-    transform: translateY(-40%);
-    z-index: 10;
-  }
-  .btn1, .btn2, .btn3, .btn4, .btn5, .btn6 {
-    font-size: 1.5rem;
-    top: 74%;
-    position: absolute;
-  }
 }
