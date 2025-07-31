@@ -27,6 +27,7 @@
   padding-bottom: 10px;
   margin-top: 10px;
   text-align: center;
+  padding-top: 5px;
 }
 
 .AlbumPage th,td {
@@ -67,6 +68,12 @@
     font-size: 1em;
   }
 
+  .AlbumPage h3  {
+    font-size: 0.9em;
+    margin-top: 20px;
+    padding-top: 5px;
+  }
+
   .text p {
     margin-bottom: 2px;
     font-size: 0.8em;
@@ -80,16 +87,16 @@
     font-size: 0.7em;
   }
   .AlbumPage th:nth-child(1) {
-  width: 20vw;
-}
+    width: 20vw;
+ }
 
-.AlbumPage th:nth-child(2) {
-  width: 75vw;
-}
+  .AlbumPage th:nth-child(2) {
+    width: 75vw;
+  }
 
-.AlbumPage th:nth-last-child(1) {
-  width: 10vw;
-}
+  .AlbumPage th:nth-last-child(1) {
+    width: 10vw;
+  }
 
   
 }
