@@ -1,0 +1,62 @@
+.Schedule {
+  /* 일요일 날짜: 빨간색 */
+  .fc-day-sun a {
+    color:  #f04444;
+  }
+    
+  /* 토요일 날짜: 파란색 */
+  .fc-day-sat a {
+      color: #4b4bf7;
+  }
+  .fc .fc-toolbar.fc-header-toolbar {
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .fc-event-title {
+     font-size: 0.8em; 
+  }
+  .fc-daygrid-day-number {
+    font-size: 0.7em; 
+  }
+}
+
+@media (max-width: 768px) {
+  .Schedule  {
+    margin-top: 30px;
+    width: 100%;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    .fc {
+      width: 90%;
+      font-size: 0.5em;
+    }
+
+    .fc-toolbar-title {
+      font-size: 1.0em;
+    }
+    .fc-today-button {
+      font-size: 0.8em;
+    }
+    .fc-next-button .fc-prev-button {
+      font-size: 0.5em; 
+    }
+
+    .fc-dayGridMonth-button {
+      font-size: 0.8em;
+    }
+
+    .fc-timeGridWeek-view .fc-toolbar-title {
+      font-size: 0.8em;
+    }
+
+    .fc-timeGridWeek-button {
+      font-size: 0.8em;
+    }
+
+
+  }
+  
+}

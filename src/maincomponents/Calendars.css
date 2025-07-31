@@ -1,0 +1,71 @@
+.Calendars {
+  padding-top: 20px;
+  width: 70vh;
+  height: 45vh;
+  .fc {
+    width: 100%;
+    font-size: 0.8em;
+  }
+  .fc-event-title {
+  font-size: 10px;
+  font-weight: bold;
+  }
+  /* 일요일 날짜: 빨간색 */
+  .fc-day-sun a {
+    color:  #f04444;
+  }
+    
+  /* 토요일 날짜: 파란색 */
+  .fc-day-sat a {
+      color: #4b4bf7;
+  }
+
+  .fc .fc-toolbar.fc-header-toolbar {
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .fc-event-title {
+     font-size: 0.8em; 
+  }
+  .fc-daygrid-day-number {
+    font-size: 0.7em; 
+  }
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .Calendars {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .fc {
+      width: 90%;
+      font-size: 0.5em;
+    }
+    .fc-toolbar-title {
+      font-size: 1.0em;
+    }
+    .fc-today-button {
+      font-size: 0.8em;
+    }
+    .fc-next-button .fc-prev-button {
+      font-size: 0.5em; 
+    }
+
+    .fc-dayGridMonth-button {
+      font-size: 0.8em;
+    }
+
+    .fc-timeGridWeek-view .fc-toolbar-title {
+      font-size: 0.8em;
+    }
+
+    .fc-timeGridWeek-button {
+      font-size: 0.8em;
+    }
+   
+  }
+}
