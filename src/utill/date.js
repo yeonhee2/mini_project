@@ -7,8 +7,7 @@ function data(artist) {
         date: artist[i].debut.replace(artist[i].debut.substring(0,4), currentYear),
         color: artist[i].color,
         textColor: artist[i].fontcolor
-    })
-
+    })   
     for( let j=0; j<artist[i].member.length; j++ ) {
       event.push({
         title: `${artist[i].member[j].name} 생일🎉`,
@@ -18,6 +17,15 @@ function data(artist) {
        })
     }
    
+  }
+
+  for(let k=0; k<artist.length;k++) {
+    event.push({
+      title: `${artist[k].group}- ${artist[k].fanclupname}`,
+      date : artist[k].fanclupdate.replace(artist[k].fanclupdate.substring(0,4), currentYear),
+      color: artist[k].color,
+      textColor: artist[k].fontcolor
+    })
   }
 
   return event

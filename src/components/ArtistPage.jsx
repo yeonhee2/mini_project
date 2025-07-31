@@ -9,6 +9,10 @@ import { useState } from 'react';
 
 function ArtistPage ( {group, performance, suggest, album} ) {
  const [activeTab, setActiveTab] = useState("profile");
+
+ if(group.length === 0) {
+    return <div> 정보 불러오는 중</div>
+  }
   
   return (
     <div className="ArtistPage">

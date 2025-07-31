@@ -10,6 +10,8 @@ import Straykids from './straykidspage/Straykids'
 import Itzy from './itzypage/Itzy'
 import Nmixx from './nmixxpage/Nmixx'
 import NiziU from './niziupage/Niziu'
+import AlbumPage from './maincomponents/AlbumPage'
+
 
 function App() {
   const [artist, setArtist] = useState([]);
@@ -57,8 +59,22 @@ function App() {
      })
   }, [])
 
+  if(artist.length === 0) {
+    return <div>아티스트 정보 불러오는중...</div>
+  }
 
+  if(album.length === 0) {
+    return <div>앨범 정보 불러오는중...</div>
+  }
   
+  if(concert.length === 0) {
+    return <div>콘서트 일정 불러오는중...</div>
+  }
+
+  if(artistPlayList.length === 0) {
+    return <div>플레이 리스트 불러오는중...</div>
+  }
+
   return (
     <>
       <Header />
@@ -71,6 +87,8 @@ function App() {
         <Route path='/itzy/20190212' element={<Itzy group={artist[3]} performance={concert[3]} suggest={artistPlayList[3]} album={album[3]}/>}/>
         <Route path='/nmixx/20220222' element={<Nmixx group={artist[4]} performance={concert[4]} suggest={artistPlayList[4]} album={album[4]}/>}/>
         <Route path='/niziu/20201202' element={<NiziU group={artist[5]} performance={concert[5]} suggest={artistPlayList[5]} album={album[5]}/>} />
+        <Route path='/album/:group' element={<AlbumPage />} />
+        <Route path='*' element={<h1>존재하지 않는 페이지</h1>} />
       </Routes>
     </>
   )

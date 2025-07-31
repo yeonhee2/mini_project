@@ -1,72 +1,45 @@
-import { useEffect, useState } from 'react';
 import './Carousel.css'
+import Slider from 'react-slick'
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from 'react-router-dom';
 
-function Carousel() {
 
-  const [slide, setSlide] = useState(1); 
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSlide(s => s % 7 ? s+1 : 1)
-    }, 4000); 
+function Carousel( {artist} ) {
+  
+  const naivgate = useNavigate();
 
-    return () => {
-      clearInterval(interval)
-    }
-
-  }, [])
-
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    autoplaySpeed : 5000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    arrows: true,
+    fade: true
+  };
+  
   return (
     <div className='container'>
       <div className="Carousel">
-        <div className={`wrapper c${slide} ${slide!=1 ? 'tran' : ''}`}>
-          <div className="box">
-            <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/DAY6.jpg`}></img>
-          </div>
-          <div className="box">
-            <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/TWICE.jpg`}></img>
-          </div>
-          <div className="box">
-            <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/Straykids.jpg`}></img>
-          </div>
-          <div className="box">
-            <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/ITZY.jpg`}></img>
-          </div>
-          <div className="box">
-            <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/NMIXX.jpg`}></img>
-          </div>
-          <div className="box">
-            <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/NiziU.jpg`}></img>
-          </div>
-          <div className="box">
-            <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/DAY6.jpg`}></img>
-          </div>
+        <div className="slider-container">
+          <Slider {...settings}>
+            {
+              artist.map((data,i) => {
+                return(
+                  <div className="box" key={i} onClick={ () => {
+                    naivgate(`/album/${data.group}`,{state: data.group })
+                  }}>
+                    <img src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/${data.group}.jpg`}></img>
+                  </div>
+                )
+              })
+            }
+          </Slider>
         </div>
-
-        <button className='pre' onClick={ () => {
-          setSlide(slide-1)
-        }}> &lt; </button>
-        <button className='btn1' onClick={() => {
-          setSlide(1)
-        }}>&nbsp;•&nbsp;</button>
-        <button className='btn2' onClick={() => {
-          setSlide(2)
-        }}>&nbsp;•&nbsp;</button>
-        <button className='btn3' onClick={() => {
-          setSlide(3)
-        }}>&nbsp;•&nbsp;</button>
-        <button className='btn4' onClick={() => {
-          setSlide(4)
-        }}>&nbsp;•&nbsp;</button>
-        <button className='btn5' onClick={() => {
-          setSlide(5)
-        }}>&nbsp;•&nbsp;</button>
-        <button className='btn6' onClick={() => {
-          setSlide(6)
-        }}>&nbsp;•&nbsp;</button>
-        <button className='next' onClick={ () => {
-          setSlide(slide+1)
-        }}> &gt; </button>
       </div>
     </div>
   )

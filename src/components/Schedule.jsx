@@ -30,6 +30,9 @@ function Schedule({performance, group, album}) {
     }
   }, [group])
 
+  if(group.length === 0) {
+    return <div> 정보 불러오는 중</div>
+  }
 
   return (
     <div ref={calendarRef} style={{marginBottom: '40px'}} className="Schedule">

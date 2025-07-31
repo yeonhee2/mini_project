@@ -39,6 +39,8 @@
 @media (max-width: 768px) {
   .Calendars {
     width: 100%;
+    display: flex;
+    justify-content: center;
     .fc {
       width: 90%;
       font-size: 0.5em;

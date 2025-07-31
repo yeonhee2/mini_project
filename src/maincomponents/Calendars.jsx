@@ -16,16 +16,16 @@ function Calendars({artist, album, concert}) {
     useEffect(() => {
       const headerEl = calendarRef.current?.querySelector('.fc-header-toolbar');
       if(headerEl) {
-        headerEl.style.backgroundColor = '#0047AB';
-        headerEl.style.color = '#fff';
+        headerEl.style.backgroundColor = '#00B6F0';
+        headerEl.style.color = '#1A1A1A';
       }
   
       const buttons = calendarRef.current?.querySelectorAll('.fc-button');
       if(buttons) {
         buttons.forEach((btn) => {
-          btn.style.backgroundColor = '#0047AB';
-          btn.style.borderColor = '#0047AB';
-          btn.style.color = '#fff';
+          btn.style.backgroundColor = '#00B6F0';
+          btn.style.borderColor = '#00B6F0';
+          btn.style.color = '#1A1A1A';
         })
       }
     }, [ ])
