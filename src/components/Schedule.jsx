@@ -8,11 +8,12 @@ import { useEffect, useRef } from "react";
 import annivers from "../componentsutill/anniversary";
 import show from "../componentsutill/performancedate";
 import albumlist from "../componentsutill/albumlist";
+import gpskd from "../componentsutill/groupschedule";
 
-function Schedule({performance, group, album}) {
+function Schedule({performance, group, album, schedule}) {
   const calendarRef = useRef(null);
-  const event = [...annivers(group),...show(performance), ...albumlist(album)]
-
+  const event = [...annivers(group),...show(performance), ...albumlist(album), ...gpskd(schedule)]
+ 
   useEffect(() => {
     const headerEl = calendarRef.current?.querySelector('.fc-header-toolbar');
     if(headerEl) {
@@ -48,8 +49,9 @@ function Schedule({performance, group, album}) {
         selectable = {true}
         selectMirror = {true}
         dayMaxEvents = {true}
-        height={500}
+        height={600}
         events={event}
+        
       
       />
 

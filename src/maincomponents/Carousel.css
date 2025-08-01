@@ -1,7 +1,7 @@
 .container {
   height: 50vh;
   margin-top: 20px;
-  background-color: #ff91b6;
+  background-color: #EAECEE;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,5 +31,4 @@
     height: 50vh; /* 모바일에서는 약간 더 크게 */
     margin-top: 70px;
   }
-
 }

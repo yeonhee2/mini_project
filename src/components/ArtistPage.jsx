@@ -7,7 +7,7 @@ import Schedule from './Schedule';
 import PlayList from './PlayList';
 import { useState } from 'react';
 
-function ArtistPage ( {group, performance, suggest, album} ) {
+function ArtistPage ( {group, performance, suggest, album, schedule} ) {
  const [activeTab, setActiveTab] = useState("profile");
 
  if(group.length === 0) {
@@ -43,7 +43,7 @@ function ArtistPage ( {group, performance, suggest, album} ) {
 
       <div className="content">
         {activeTab === "profile" && <Profile group={group} />}
-        {activeTab === "schedule" && <Schedule performance={performance} group={group} album={album}/>}
+        {activeTab === "schedule" && <Schedule performance={performance} group={group} album={album} schedule={schedule}/>}
         {activeTab === "playlist" && <PlayList playlist={suggest} /> }
       </div>
       
