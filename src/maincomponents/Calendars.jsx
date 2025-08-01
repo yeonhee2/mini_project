@@ -45,7 +45,7 @@ function Calendars({artist, album, concert}) {
         selectable = {true} // 선택 가능 여부
         selectMirror = {true} // timegrid 뷰에서 자리 표시자 여부
         dayMaxEvents = {true} // 한 셀에 최대 이벤트 표시 여부
-        height={500}
+        height={600}
         events={event}
         />
     </div>

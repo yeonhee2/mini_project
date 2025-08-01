@@ -2,13 +2,14 @@
   padding-top: 20px;
   width: 70vh;
   height: 45vh;
+  margin: auto;
   .fc {
     width: 100%;
     font-size: 0.8em;
   }
   .fc-event-title {
-  font-size: 10px;
-  font-weight: bold;
+    font-size: 9px;
+    font-weight: bold;
   }
   /* 일요일 날짜: 빨간색 */
   .fc-day-sun a {
@@ -27,13 +28,13 @@
     font-weight: 500;
   }
 
-  .fc-event-title {
-     font-size: 0.8em; 
-  }
   .fc-daygrid-day-number {
     font-size: 0.7em; 
   }
-  margin: auto;
+  .fc-event {
+    height: 17px;
+  }
+  
 }
 
 @media (max-width: 768px) {
@@ -65,6 +66,10 @@
 
     .fc-timeGridWeek-button {
       font-size: 0.8em;
+    }
+
+    .fc-event-title {
+     font-size: 8px; 
     }
    
   }

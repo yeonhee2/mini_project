@@ -18,6 +18,7 @@ function App() {
   const [album, setAlbum] = useState([]);
   const [concert, setConcert] = useState([]);
   const [artistPlayList, setArtistPlayList] =useState([]);
+  const [groupevent, setGroupEvent] =useState([]);
 
   useEffect( () => {
     axios.get('https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/artist.json')
@@ -59,6 +60,16 @@ function App() {
      })
   }, [])
 
+  useEffect( () => {
+    axios.get('https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/gpschedule.json')
+     .then( (response) => {
+      setGroupEvent([...response.data])
+     }) 
+     .catch((error) => {
+      console.log(error)
+     })
+  }, [])
+
   if(artist.length === 0) {
     return <div>아티스트 정보 불러오는중...</div>
   }
@@ -75,18 +86,22 @@ function App() {
     return <div>플레이 리스트 불러오는중...</div>
   }
 
+  if(groupevent.length === 0) {
+    return <div>플레이 리스트 불러오는중...</div>
+  }
+
   return (
     <>
       <Header />
 
       <Routes>
         <Route path='/' element={<MainPage artist={artist} album={album} concert={concert}/>} />
-        <Route path='/day6/20150907' element={<Day6 group={artist[0]} performance={concert[0]} suggest={artistPlayList[0]} album={album[0]} />} />
-        <Route path='/twice/20151020' element={<Twice group={artist[1]} performance={concert[1]} suggest={artistPlayList[1]} album={album[1]}/>}/>
-        <Route path='/straykids/20180325' element={<Straykids group={artist[2]} performance={concert[2]} suggest={artistPlayList[2]} album={album[2]}/>}/>
-        <Route path='/itzy/20190212' element={<Itzy group={artist[3]} performance={concert[3]} suggest={artistPlayList[3]} album={album[3]}/>}/>
-        <Route path='/nmixx/20220222' element={<Nmixx group={artist[4]} performance={concert[4]} suggest={artistPlayList[4]} album={album[4]}/>}/>
-        <Route path='/niziu/20201202' element={<NiziU group={artist[5]} performance={concert[5]} suggest={artistPlayList[5]} album={album[5]}/>} />
+        <Route path='/day6/20150907' element={<Day6 group={artist[0]} performance={concert[0]} suggest={artistPlayList[0]} album={album[0]} schedule={groupevent[0]} />} />
+        <Route path='/twice/20151020' element={<Twice group={artist[1]} performance={concert[1]} suggest={artistPlayList[1]} album={album[1]} schedule={groupevent[1]} />} />
+        <Route path='/straykids/20180325' element={<Straykids group={artist[2]} performance={concert[2]} suggest={artistPlayList[2]} album={album[2]} schedule={groupevent[2]} />} />
+        <Route path='/itzy/20190212' element={<Itzy group={artist[3]} performance={concert[3]} suggest={artistPlayList[3]} album={album[3]} schedule={groupevent[3]} />} />
+        <Route path='/nmixx/20220222' element={<Nmixx group={artist[4]} performance={concert[4]} suggest={artistPlayList[4]} album={album[4]} schedule={groupevent[4]} />} />
+        <Route path='/niziu/20201202' element={<NiziU group={artist[5]} performance={concert[5]} suggest={artistPlayList[5]} album={album[5]} schedule={groupevent[5]} />} />
         <Route path='/album/:group' element={<AlbumPage />} />
         <Route path='*' element={<h1>존재하지 않는 페이지</h1>} />
       </Routes>
