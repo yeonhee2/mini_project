@@ -1,4 +1,9 @@
 .Schedule {
+  .fc {
+    width: 100%;
+    font-size: 0.8em;
+  }
+
   /* 일요일 날짜: 빨간색 */
   .fc-day-sun a {
     color:  #f04444;
@@ -19,6 +24,9 @@
   }
   .fc-daygrid-day-number {
     font-size: 0.7em; 
+  }
+  .fc-event {
+    height: 17px;
   }
 }
 
@@ -55,7 +63,9 @@
     .fc-timeGridWeek-button {
       font-size: 0.8em;
     }
-
+    .fc-event-title {
+     font-size: 8px; 
+    }
 
   }
   

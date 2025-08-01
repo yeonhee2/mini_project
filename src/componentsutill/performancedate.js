@@ -5,7 +5,6 @@ function show(performance) {
       title: `${performance.group} - ${performance.concertdate[i].country} 🎫`,
       start: performance.concertdate[i].start,
       end: performance.concertdate[i].end,
-      allDay: true,
       color: performance.color,
       textColor: performance.fontcolor
     })

@@ -7,7 +7,6 @@ function concerts(concert) {
           title: `${concert[i].group} - ${concert[i].concertdate[j].country} 🎫`,
           start: concert[i].concertdate[j].start,
           end: concert[i].concertdate[j].end,
-          allDay: true,
           color: concert[i].color,
           textColor: concert[i].fontcolor
       })
