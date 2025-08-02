@@ -10,7 +10,7 @@ function MainPage({artist, album, concert}) {
   })
 
   return(
-    <div style={{marginBottom: '230px'}} >
+    <div style={{marginBottom: '180px'}} >
       <Carousel artist={artist} />
       <Calendars artist={artist} album={album} concert={concert}/>
     </div>

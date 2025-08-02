@@ -1,16 +1,15 @@
 .Calendars {
   padding-top: 20px;
-  width: 70vh;
+  width: 90vh;
   height: 45vh;
   margin: auto;
+  display: flex;
+  gap : 20px;
   .fc {
     width: 100%;
     font-size: 0.8em;
   }
-  .fc-event-title {
-    font-size: 9px;
-    font-weight: bold;
-  }
+  
   /* 일요일 날짜: 빨간색 */
   .fc-day-sun a {
     color:  #f04444;
@@ -31,10 +30,18 @@
   .fc-daygrid-day-number {
     font-size: 0.7em; 
   }
-  .fc-event {
-    height: 17px;
-  }
   
+  .fc-list-event-time {
+    display: none;
+  }
+  .fc-list-event-title {
+    font-size: 13px;
+  }
+  .fc .fc-list-day-text {
+    font-size: 12px;
+
+  }
+
 }
 
 @media (max-width: 768px) {
@@ -42,6 +49,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    gap : 0;
+    height: 400px;
     .fc {
       width: 90%;
       font-size: 0.5em;
@@ -55,21 +64,25 @@
     .fc-next-button .fc-prev-button {
       font-size: 0.5em; 
     }
-
-    .fc-dayGridMonth-button {
-      font-size: 0.8em;
-    }
-
     .fc-timeGridWeek-view .fc-toolbar-title {
       font-size: 0.8em;
     }
 
-    .fc-timeGridWeek-button {
-      font-size: 0.8em;
+    .fc-list-event-title {
+      font-size: 9px;
+    }
+    .fc .fc-list-day-text {
+      font-size: 10px;
     }
 
-    .fc-event-title {
-     font-size: 8px; 
+    .Calendars > * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .month {
+      margin-left: 15px;
+      margin-right: -15px;
     }
    
   }

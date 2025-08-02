@@ -7,7 +7,6 @@ function albums(album) {
           title: `${album[i].music[j].groupsolo}- ${album[i].music[j].albumname} 📀`,
           date: album[i].music[j].Releasedate,
           color: album[i].music[j].color,
-          textColor: album[i].music[j].fontcolor
       })
     }
   }

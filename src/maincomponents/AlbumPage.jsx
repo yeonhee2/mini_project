@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import './AlbumPage.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
-import { faMusic, faRadio, faTv, faVideo } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faMusic, faRadio, faTv, faVideo } from "@fortawesome/free-solid-svg-icons";
 
 function AlbumPage() {
+  const navigate = useNavigate();
   const location = useLocation()
   const album = location.state;
   const [albumDetail, setAlbumDetail] = useState([])
@@ -43,6 +44,9 @@ function AlbumPage() {
               )
             })
           }
+        </div>
+        <div className="home-icon" onClick={()=> navigate('/')}>
+          <FontAwesomeIcon icon={faHouse} size="2xl" />
         </div>
       </div>
       { albumDetail.Youtube === " " ? " "

@@ -23,7 +23,7 @@ a{
   width: 100%;
   max-height: 200px;
   object-fit: cover;
-  aspect-ratio: 3/4;
+  aspect-ratio: 3/4; /* Aspect Ratio(종횡비)는 요소의 크기를 비율대로 조정할 수 있게 함. */
   border-radius: 6px;
 }
 
