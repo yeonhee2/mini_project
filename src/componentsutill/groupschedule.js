@@ -7,7 +7,6 @@ function gpskd(schedule) {
       start: schedule.sd[i].start,
       end: schedule.sd[i].end,
       color : schedule.color,
-      textColor : schedule.fontcolor
     })
   }
 

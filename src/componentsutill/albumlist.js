@@ -5,7 +5,6 @@ function albumlist( album ) {
       title: `${album.music[i].groupsolo}- ${album.music[i].albumname} 📀`,
       date: album.music[i].Releasedate,
       color: album.music[i].color,
-      textColor: album.music[i].fontcolor
     })
   }
 
