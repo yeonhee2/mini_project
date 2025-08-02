@@ -1,4 +1,6 @@
 .Schedule {
+  display: flex;
+  gap: 10px;
   .fc {
     width: 100%;
     font-size: 0.8em;
@@ -19,14 +21,19 @@
     font-size: 12px;
     font-weight: 500;
   }
-  .fc-event-title {
-     font-size: 0.8em; 
-  }
   .fc-daygrid-day-number {
     font-size: 0.7em; 
   }
-  .fc-event {
-    height: 17px;
+  
+  .fc-list-event-time {
+    display: none;
+  }
+  .fc-list-event-title {
+    font-size: 12px;
+  }
+  .fc .fc-list-day-text {
+    font-size: 12px;
+
   }
 }
 
@@ -34,7 +41,6 @@
   .Schedule  {
     margin-top: 30px;
     width: 100%;
-    height: 30vh;
     display: flex;
     justify-content: center;
     .fc {
@@ -43,30 +49,31 @@
     }
 
     .fc-toolbar-title {
-      font-size: 1.0em;
+      font-size: 0.9em;
     }
     .fc-today-button {
-      font-size: 0.8em;
+      font-size: 0.7em;
     }
     .fc-next-button .fc-prev-button {
       font-size: 0.5em; 
     }
 
-    .fc-dayGridMonth-button {
-      font-size: 0.8em;
+    .fc-list-event-title {
+      font-size: 9px;
+    }
+    .fc .fc-list-day-text {
+      font-size: 10px;
     }
 
-    .fc-timeGridWeek-view .fc-toolbar-title {
-      font-size: 0.8em;
+    .Schedule > * {
+      margin: 0;
+      padding: 0;
     }
 
-    .fc-timeGridWeek-button {
-      font-size: 0.8em;
+    .month {
+      margin-left: 15px;
+      margin-right: -25px;
     }
-    .fc-event-title {
-     font-size: 8px; 
-    }
-
   }
   
 }
