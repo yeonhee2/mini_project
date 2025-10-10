@@ -36,6 +36,9 @@ function AlbumPage() {
           <p>타이틀 -  &nbsp;{albumDetail.title}</p>
           <p>발매일 -  &nbsp;{albumDetail.releaseDate}</p>
         </div>
+        <div className="home-icon" onClick={()=> navigate('/')}>
+          <FontAwesomeIcon icon={faHouse} size="2xl" />
+        </div>
       </div>
       { albumDetail.Youtube === " " ? " "
         :
