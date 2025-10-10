@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom"
 import './AlbumPage.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
-import { faMusic, faRadio, faTv, faVideo } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faMusic, faRadio, faTv, faVideo } from "@fortawesome/free-solid-svg-icons";
 
 function AlbumPage() {
   const location = useLocation()
