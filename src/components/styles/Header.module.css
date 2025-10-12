@@ -1,0 +1,158 @@
+.Header { 
+  position: sticky;
+  z-index: 200; 
+  background:#e5e5e5; 
+  border-bottom:1px solid rgba(0,0,0,.06); 
+}
+
+.HeaderInner {
+  position: relative;
+  height: 68px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex; 
+  align-items: center; 
+  gap: 6px;              /* 로고와 메뉴 사이 좁게 */
+}
+
+.homeLogo img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform .18s ease;
+}
+.homeLogo img:hover { transform: scale(1.04); }
+
+.menuToggle {
+  display: none;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+.navPanel {
+  margin-left: auto;
+}
+
+.navMenu {
+  display: flex;
+  align-items: center;
+  gap: clamp(25px, 3.2vw, 45px); 
+  list-style: none; 
+  margin: 0; 
+  padding: 0;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.navMenu li img {
+  display: block;
+  height: clamp(32px, 3vw, 44px);
+  width: auto; 
+  object-fit: contain;
+  -webkit-user-drag: none; 
+  user-select: none;
+  cursor: pointer;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.navMenu li img:hover {
+  transform: translateY(-1px) scale(1.03);
+  opacity: .95;
+}
+
+/* NMIXX 로고만 크기 줄이기 (5번째 항목) */
+.navMenu li:nth-child(5) img {
+  height: clamp(30px, 2.7vw, 40px);
+}
+
+.homeLogo,
+.navMenu li {
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.menuToggle:hover { background: rgba(0,0,0,.06); }
+.menuToggle:active { transform: scale(.98); }
+.menuToggle:focus-visible { outline: 2px solid #00B6F0; outline-offset: 2px; }
+
+@media (min-width: 1280px) {
+  .navMenu { gap: 36px; }         /* 필요 시 28~36px 사이로 조절 */
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .HeaderInner { height: 62px; }
+  .navMenu { gap: 25px; }
+  .navMenu li img { height: 30px;  }
+  .navMenu li:nth-child(5) img { height: 28px; }
+}
+
+@media (max-width: 768px) {
+  .HeaderInner { height: 68px; position: relative; } /* navPanel 기준이 되도록 */
+
+  .menuToggle {
+    display: inline-flex;
+    z-index: 3;
+    align-items: center; justify-content: center;
+    width: 44px; height: 44px;
+    border: none; background: transparent;
+    font-size: 22px; line-height: 1; cursor: pointer;
+    border-radius: 10px; margin-left: auto;
+    transition: background .15s ease, transform .1s ease;
+  }
+
+  /* ▼ 드롭다운 패널: 헤더 바로 아래로 내리기 + 높이 자동 */
+  .navPanel {
+    position: absolute;
+    left: 0; right: 0;
+    top: 68px;           /* HeaderInner 높이와 동일하게 */
+    display: none;       /* 기본 닫힘 */
+    z-index: 2;
+  }
+  .navPanel.open {
+    display: block;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: saturate(120%) blur(4px);
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    padding: 12px 10px;
+  }
+
+  .navMenu {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0; padding: 0; list-style: none;
+  }
+  .navMenu li { display: flex; align-items: center; justify-content: center; }
+
+  /* ▼ 이미지 크기: max-height 제거 (충돌 원인) */
+  .navMenu li img {
+    height: 22px;        /* 필요하면 24px까지 무난 */
+    width: auto; object-fit: contain;
+    user-select: none; -webkit-user-drag: none;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .navMenu li img:hover { transform: translateY(-1px) scale(1.03); opacity: .95; }
+
+  /* NMIXX만 살짝 축소 — 중복 선언 제거 */
+  .navMenu li:nth-child(5) img { height: 20px; }
+}
+
+@media (max-width: 380px) {
+  .navMenu { gap: 12px; }
+  .navMenu li img {
+    height: 18px;
+    max-height: 18px;
+  }
+  .navMenu li:nth-child(5) img {
+    height: 16px;
+    max-height: 16px;
+  }
+}

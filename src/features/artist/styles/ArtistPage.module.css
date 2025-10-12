@@ -1,0 +1,131 @@
+:root {
+  --ap-max: 1320px;            /* 페이지 최대 너비 */
+  --ap-gutter: 20px;           /* 좌우 여백 */
+  --ap-text: #1f2330;
+  --ap-muted: #6b7280;
+  --ap-border: #e7e7f1;
+  --ap-card: #fff;
+  --ap-shadow: 0 10px 28px rgba(0,0,0,.06);
+  --ap-accent: #6b4ef3;        /* 포인트 컬러 */
+}
+
+.ArtistPage {
+  max-width: var(--ap-max);
+  margin: 18px auto 40px;
+  padding: 0 var(--ap-gutter);
+  color: var(--ap-text);
+}
+
+/* ====== 상단 영상 + SNS ====== */
+.videoSection {
+  background: var(--ap-card);
+  border: 1px solid var(--ap-border);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: var(--ap-shadow);
+  margin-bottom: 16px;
+}
+
+/* 16:9 플레이어 래퍼 */
+.videoSection iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 12px;
+  display: block;
+}
+
+/* SNS 아이콘 줄 */
+.sns {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.sns a {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 1px solid var(--ap-border);
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.04);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+}
+.sns a:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ap-shadow);
+  border-color: #dad9e8;
+  background: #fafaff;
+}
+
+/* ====== 탭 내비게이션 ====== */
+.artistPageNav {
+  position: sticky;
+  top: 54px;                  /* 상단 헤더가 있다면 맞춰 조정 */
+  z-index: 1;
+  margin: 10px 0 14px;
+}
+.menu {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 8px;
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  border: 1px solid var(--ap-border);
+  border-radius: 12px;
+  background: var(--ap-card);
+  box-shadow: 0 6px 18px rgba(0,0,0,.04);
+}
+.menu li {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: var(--ap-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s ease, color .12s ease, transform .08s ease;
+}
+.menu li:hover { background: #f6f7ff; color: var(--ap-accent); }
+.menu li.active {
+  color: #fff;
+  background: var(--ap-accent);
+  box-shadow: 0 8px 20px rgba(107,78,243,.22);
+  transform: translateY(-1px);
+}
+
+/* ====== 탭 콘텐츠 ====== */
+.content {
+  position: relative;
+  z-index: 2;        /* ← 콘텐츠가 더 위 */
+  background: var(--ap-bg); /* 틈 사이로 비치지 않도록(선택) */
+  padding-bottom: 12px;     /* 마지막 줄 여백(선택) */
+}
+
+.active {
+  color: #fff;
+  background: var(--ap-accent);
+  box-shadow: 0 8px 20px rgba(107,78,243,.22);
+  transform: translateY(-1px);
+}
+
+.empty {
+  text-align: center;
+  padding: 12px 10px;
+  color: var(--ap-muted);
+  border: 1px dashed var(--ap-border);
+  border-radius: 12px;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .ArtistPage { padding: 0 16px; }
+  .menu { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .menu li { text-align: center; padding: 10px 12px; }
+}
+@media (max-width: 640px) {
+  .menu { grid-template-columns: 1fr; }
+}

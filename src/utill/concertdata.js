@@ -6,9 +6,9 @@ function concerts(concert) {
       event.push({
           title: `${concert[i].group} - 
           ${concert[i].concertdate[j].title} (${concert[i].concertdate[j].country})`,
-          start: concert[i].concertdate[j].start,
-          end: concert[i].concertdate[j].end,
+          start: concert[i].concertdate[j].date,
           color: concert[i].color,
+          type:concert[i].concertdate[j].type
       })
     }
   }

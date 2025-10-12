@@ -1,0 +1,84 @@
+:root {
+  --pf-border: #e7e7f1;
+  --pf-shadow: 0 10px 28px rgba(0,0,0,.06);
+}
+
+/* 그리드 래퍼 */
+.Profile {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* 카드 */
+.memberBox {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--pf-border);
+  background: #fff;           /* data.color가 인라인으로 덮어씌워짐 */
+  box-shadow: var(--pf-shadow);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.memberBox:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(0,0,0,.10);
+  border-color: #dad9e8;
+}
+
+/* 프로필 이미지 */
+.memberBox img {
+  width: 100%;
+  aspect-ratio: 1 / 1.1; /* 세로 조금 긴 사각형이 더 자연스러움 */
+  object-fit: cover;
+  object-position: 50% 35%;  /* 약간 위쪽 포커스 */
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.06);
+  background: #f3f4f8;
+  display: block;
+}
+
+/* 텍스트 */
+.memberBox h3 {
+  margin: 2px 0 0;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: .2px;
+}
+.memberBox p {
+  margin: 0;
+  font-size: 19px;
+}
+
+/* SNS 아이콘들 (카드 하단) */
+.memberBox a {
+  width: 45px;
+  height: 45px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(2px);
+  margin-right: 6px;
+  transition: transform .1s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+}
+.memberBox a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+  background: #fff;
+  border-color: #d7d7e6;
+}
+
+/* 반응형 */
+@media (max-width: 1200px) {
+  .Profile { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+@media (max-width: 860px) {
+  .Profile { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 520px) {
+  .Profile { grid-template-columns: 1fr; }
+}

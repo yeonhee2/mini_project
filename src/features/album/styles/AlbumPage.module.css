@@ -1,0 +1,166 @@
+:root {
+  --ap-bg: #fff;
+  --ap-text: #222;
+  --ap-text-muted: #666;
+  --ap-border: #e9e9ef;
+  --ap-accent: #6b4ef3;
+  --ap-shadow: 0 10px 28px rgba(0,0,0,.06);
+  --gutter: 24px; 
+}
+
+.AlbumPage {
+  max-width: 1320px;  
+  margin: 20px auto 36px;
+  padding: 0 var(--gutter);    /* 페이지 좌우 여백 */
+  color: var(--ap-text);
+}
+
+/* 상단 카드 */
+.information {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(260px, 36%) 1fr 48px;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--ap-border);
+  border-radius: 18px;
+  background: var(--ap-bg);
+  box-shadow: var(--ap-shadow);
+  margin-bottom: 18px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+.AlbumPage :where(.contentTable) {
+  margin-left: 0;
+  margin-right: 0;
+  /* 필요시 내부 패딩만 조정
+  padding-left: 16px;
+  padding-right: 16px; 
+  */
+}
+
+@media (max-width: 720px) {
+  .information {
+    grid-template-columns: 128px 1fr 40px; /* ← 모바일에서도 조금 더 크게 */
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+/* 앨범 이미지 */
+.groupimg {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--ap-border);
+  background: #f6f7fb;
+  /* 기본은 정사각으로, 클래스에 따라 덮어쓰기 */
+  aspect-ratio: 1 / 1;
+}
+.groupimg img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-position: center;
+}
+
+.groupimg.wide {
+  aspect-ratio: 16 / 9;        /* 원본에 가까운 비율 */
+}
+.groupimg.wide img {
+  object-fit: contain;          /* ← 잘림 없이 전체 표시 */
+  background: #f6f7fb;          /* 여백 배경 */
+}
+
+/* 정사각: 중앙 살짝 위로 크롭해도 좋다면 */
+.groupimg.square {
+  aspect-ratio: 1 / 1;
+}
+.groupimg.square img {
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+/* 세로형: 세로형은 살짝 세로 비율로 */
+.groupimg.tall {
+  aspect-ratio: 3 / 4;
+}
+.groupimg.tall img {
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+
+/* 텍스트 블록 */
+.text h1 {
+  margin: 0 0 6px;
+  font-size: 30px;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.text p {
+  margin: 4px 0;
+  color: var(--ap-text-muted);
+  font-size: 18px;
+}
+
+@media (min-width: 1600px) {
+  .AlbumPage { max-width: 1440px; }      /* 필요하면 1480~1520px로 조정 */
+}
+
+@media (max-width: 720px) {
+  .text h1 { font-size: 18px; }
+  .text p  { font-size: 13px; }
+  .information {
+    grid-template-columns: minmax(150px, 40%) 1fr 40px;
+  }
+  .groupimg.wide { aspect-ratio: 16 / 10; } /* 모바일에선 너무 납작해 보이지 않게 */
+}
+
+
+/* 홈 아이콘 */
+.homeIcon {
+  justify-self: end;
+  align-self: start;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--ap-border);
+  display: grid;
+  place-items: center;
+  background: #fff;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+}
+.homeIcon:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ap-shadow);
+  border-color: #dad9e8;
+  background: #fafaff;
+}
+@media (max-width: 720px) {
+  .homeIcon { width: 40px; height: 40px; border-radius: 10px; }
+}
+
+/* 페이지 하단 섹션 간 간격 (ContentTable과의 여백 정리) */
+.AlbumPage :where(.contentTable) {
+  margin-top: 16px;
+}
+
+/* 다크 모드 대비 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ap-bg: #14141b;
+    --ap-text: #e8e8f3;
+    --ap-text-muted: #a8a8bf;
+    --ap-border: #2a2a39;
+    --ap-shadow: 0 10px 28px rgba(0,0,0,.42);
+  }
+  .groupimg { background: #0f0f16; }
+  .homeIcon { background: #1a1a22; }
+  .homeIcon:hover { background: #1f1f2a; }
+}
