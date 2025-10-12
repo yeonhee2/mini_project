@@ -1,12 +1,12 @@
+import Calendars from "../features/schedule/pages/Calendars"
+import Carousel from "../features/album/components/Carousel"
 import { useEffect } from "react"
-import Calendars from "../maincomponents/Calendars"
-import Carousel from "../maincomponents/Carousel"
 import { setPageTitle } from "../utill/setTitle"
 
-function MainPage({artist, album, concert}) {
-
+function MainPage({ artist, album, concert}) {
+  
   useEffect(() => {
-    setPageTitle("JYP I-DOL")
+    setPageTitle("Idol Note")
   })
 
   return(

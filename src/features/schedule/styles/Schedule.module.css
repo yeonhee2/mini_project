@@ -1,0 +1,330 @@
+.Schedule {
+  display: grid;
+  gap: 16px;
+}
+
+/* 달력 2열 (월간 좌 / 리스트 우) */
+.calGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr; /* 월간 넓게 */
+  gap: 16px;
+}
+
+.month,
+.list {
+  background: #fff;
+  border: 1px solid #e7e7f1;
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+}
+
+.noEventsBox{
+  margin: 10px 12px 16px;
+  padding: 28px 16px;
+  background: #f3f5f9;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  color: #5b6273;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ===== FullCalendar 공통 ===== */
+:global(.fc) {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  background: transparent;
+  border-radius: 12px;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* 헤더(버전별 호환) */
+:global(.fc-toolbar),
+:global(.fc-header-toolbar) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+}
+
+:global(.fc-toolbar-title) {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* 요일 헤더 */
+:global(.fc-col-header-cell) {
+  background: #f0f2f5;
+  color: #333;
+  font-weight: 600;
+  padding: 8px 0;
+}
+
+/* 날짜 셀 */
+:global(.fc-daygrid-day) {
+  border: 1px solid #eee;
+  transition: background 0.15s;
+}
+:global(.fc-daygrid-day:hover) {
+  background: #f9fbfd;
+}
+
+/* 월간의 기본 이벤트 DOM 숨김 → 점만(커스텀) 보이게 */
+:global(.fc-daygrid-month-view .fc-daygrid-event),
+:global(.fc-daygrid-month-view .fc-event),
+:global(.fc-daygrid-month-view .fc-more-link),
+:global(.fc-daygrid-month-view .fc-daygrid-day-bottom),
+:global(.fc-daygrid-month-view .fc-bg-event) {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+}
+
+/* --- 월간 점 컨테이너(커스텀 DOM) --- */
+:global(.fc .fc-dots-wrap .fc-dot) {
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  flex: 0 0 auto !important;
+}
+:global(.fc .fc-daygrid-month-view .fc-dots-wrap) {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ===== 리스트 뷰 ===== */
+:global(.fc-list-table) {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+:global(.fc-list-day-cushion) {
+  border-top: 2px solid #222;
+  background: transparent;
+  padding: 14px 0 6px;
+  letter-spacing: 0.2px;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+:global(.fc-list-day-side-text) {
+  margin-right: 12px;
+}
+:global(.fc-list-event) {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 4px 0;
+}
+
+/* 리스트 이벤트 커스텀 내용 */
+.evRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: #222;
+}
+.evTitle {
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* 타입 배지 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+.typeS {
+  background: #f08fa1;
+}
+.typeR {
+  background: #f5b35c;
+}
+.typeA {
+  background: #9ad06a;
+}
+.typeE {
+  background: #4ec3a6;
+}
+.typeT,
+.typeETC {
+  background: #9aa0a6;
+}
+.list .badge,
+.list .badgeLg {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+/* ===== 주별 페이지네이션 ===== */
+.weekPager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 10px 0 6px;
+  color: #333;
+  font-weight: 700;
+}
+.weekBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+.weekBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.weekPagerText {
+  min-width: 72px;
+  text-align: center;
+}
+
+/* ===== 범례(달력 아래) ===== */
+.legendWrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+.legendBlock {
+  background: #fff;
+  border: 1px solid #e7e7f1;
+  border-radius: 12px;
+  padding: 12px;
+}
+.legendTitle {
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #333;
+}
+.typeLegendRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+.typeLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 색상 범례 */
+.colorLegendGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px 12px;
+}
+.colorLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.colorDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+.legendText {
+  color: #1f2330;
+  font-size: 18px;
+}
+.legendEmpty {
+  color: #888;
+  font-size: 15px;
+}
+
+/* 다음/이전 달 칸 완전 비활성 (숫자/도트/클릭) */
+:global(.fc-daygrid-day.fc-day-other .fc-daygrid-day-number) {
+  display: none !important;
+}
+:global(.fc-daygrid-day.fc-day-other .fc-dots-wrap) {
+  display: none !important;
+}
+:global(.fc-daygrid .fc-day-other .fc-daygrid-day-frame) {
+  visibility: hidden;
+  pointer-events: none;
+}
+:global(.fc-daygrid .fc-day-other) {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+
+/* =========================
+   모바일
+   ========================= */
+@media (max-width: 1024px) {
+  .calGrid {
+    grid-template-columns: 1fr;
+  }
+  .legendWrap {
+    grid-template-columns: 1fr;
+  }
+  :global(.fc) {
+    font-size: 13px;
+  }
+  :global(.fc-toolbar-title) {
+    font-size: 16px;
+  }
+  .evRow {
+    font-size: 14px;
+  }
+  .list .badge,
+  .list .badgeLg {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 430px) {
+  :global(.fc) {
+    font-size: 11px;
+  }
+  :global(.fc-toolbar-title) {
+    font-size: 12px;
+  }
+  .list .badge,
+  .list .badgeLg {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+  .weekBtn {
+    width: 28px;
+    height: 28px;
+  }
+  .weekPagerText {
+    font-size: 11px;
+  }
+  .legendText {
+    font-size: 12px;
+  }
+}

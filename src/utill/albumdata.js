@@ -5,8 +5,9 @@ function albums(album) {
     for(let j=0; j<album[i].music.length; j++) {
       event.push({
           title: `${album[i].music[j].groupsolo}- ${album[i].music[j].albumname} 📀`,
-          date: album[i].music[j].Releasedate,
+          start: album[i].music[j].Releasedate,
           color: album[i].music[j].color,
+          type: album[i].music[j].type
       })
     }
   }
