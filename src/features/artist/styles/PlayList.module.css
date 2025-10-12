@@ -1,0 +1,10 @@
+/* PlayList.module.css */
+.PlayList {
+  display: grid;
+  gap: 16px;
+}
+
+/* 섹션 사이 여백/반응형 간격 */
+.block {
+  margin-top: 4px;
+}

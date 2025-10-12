@@ -1,0 +1,50 @@
+.spinner {
+  display: inline-block;
+  width: var(--size, 28px);
+  height: var(--size, 28px);
+  border: calc(var(--size, 28px) / 8) solid #e6effa;
+  border-top-color: var(--color, #0073e6);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.spinnerWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinnerLabel {
+  font-size: 14px;
+  color: var(--color-text, #333);
+}
+
+/* 가운데 배치 */
+.spinnerCenter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+}
+
+/* 컨테이너 정렬 */
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+
+/* 특정 위치 (오른쪽 위) */
+.spinnerTopRight {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+}

@@ -1,0 +1,101 @@
+.Carousel {
+  background: linear-gradient(180deg, #f3f5f7 0%, #edf1f5 100%);
+  padding: 22px 0;
+}
+
+.sliderContainer {
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+}
+
+.box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  aspect-ratio: 16 / 9;
+  max-height: 62vh;
+  background: #fcfcfe;                 /* 완전 흰색 대신 살짝 부드러운 화이트 */
+  border: 1px solid #e7ebf1;           /* 경계선 → 눈부심 완화 */
+  box-shadow: 0 10px 24px rgba(12, 18, 28, 0.10);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* === slick 컨트롤 강제 덮어쓰기 (우선순위 ↑) === */
+:global(.slick-slider) { position: relative; }
+:global(.slick-list) { border-radius: 12px; }
+
+/* 버튼의 위치/모양 */
+:global(.slick-slider .slick-prev),
+:global(.slick-slider .slick-next) {
+  position: absolute; top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;                         /* 확실히 위로 */
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);   /* 밝은 배경 원형 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: auto;                 /* 클릭 보장 */
+}
+
+:global(.slick-slider .slick-prev) { left: 10px; }
+:global(.slick-slider .slick-next) { right: 10px; }
+
+/* 아이콘: 테마 덮어쓰기 위해 content와 색을 재정의 */
+:global(.slick-slider .slick-prev:before),
+:global(.slick-slider .slick-next:before) {
+  font-size: 22px;
+  line-height: 1;
+  color: #2f3440;                      /* 어두운 회색 → 밝은 배경에서 선명 */
+  opacity: 1;
+}
+
+/* 호버 시 살짝 강조 (접근성) */
+:global(.slick-slider .slick-prev:hover),
+:global(.slick-slider .slick-next:hover) {
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.16);
+}
+
+/* 도트: 눈 아프지 않게 연한 톤 */
+:global(.slick-dots) { bottom: -18px; }
+:global(.slick-dots li button:before) {
+  color: #b7c0ce;     /* 연한 그레이 */
+  opacity: .8;
+  font-size: 8px;
+}
+:global(.slick-dots li.slick-active button:before) {
+  color: #5b667a;     /* 과도한 흰색 대신 중간 회색 */
+  opacity: 1;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .sliderContainer { width: min(980px, 94vw); }
+  .box { max-height: 56vh; }
+}
+@media (max-width: 768px) {
+  .Carousel { padding: 14px 0 22px; }
+  .sliderContainer { width: 95vw; }
+  .box { aspect-ratio: 4 / 3; max-height: 48vh; border-radius: 10px; }
+  :global(.slick-slider .slick-prev) { left: 6px; }
+  :global(.slick-slider .slick-next) { right: 6px; }
+  :global(.slick-slider .slick-prev:before),
+  :global(.slick-slider .slick-next:before) { font-size: 20px; }
+  :global(.slick-dots) { bottom: -14px; }
+}
+@media (max-width: 380px) {
+  :global(.slick-dots) { bottom: -10px; }
+}
