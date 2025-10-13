@@ -1,0 +1,83 @@
+.scrollTopBtn {
+  position: fixed;
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  right:  calc(18px + env(safe-area-inset-right));
+
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid rgba(100, 100, 100, 0.25);     /* 살짝 회색 */
+  background: rgba(255, 255, 255, 0.6);            /* 투명 흰색 느낌 */
+  color: #2f2f2f;                                  /* 중간 톤 글씨 */
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity .25s ease, transform .25s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  z-index: 9999;
+}
+
+/* 표시될 때 */
+.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* hover/active 효과 */
+.scrollTopBtn:hover {
+  background: rgba(240, 240, 240, 0.95);
+  border-color: rgba(80, 80, 80, 0.3);
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.scrollTopBtn:active {
+  transform: translateY(1px);
+  background: rgba(235, 235, 235, 0.85);
+}
+
+/* 접근성 포커스 */
+.scrollTopBtn:focus-visible {
+  outline: 2px solid rgba(120, 120, 120, 0.6);
+  outline-offset: 2px;
+}
+
+/* 넓은 화면일 때 살짝 여유 */
+@media (min-width: 1280px) {
+  .scrollTopBtn { right: 26px; bottom: 26px; }
+}
+
+/* 모바일 */
+@media (max-width: 520px) {
+  .scrollTopBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    right:  calc(14px + env(safe-area-inset-right));
+  }
+}
+
+/* 다크모드 자동 조정 */
+@media (prefers-color-scheme: dark) {
+  .scrollTopBtn {
+    background: rgba(40, 40, 45, 0.6);
+    color: #f5f5f5;
+    border-color: rgba(180, 180, 180, 0.25);
+    box-shadow: 0 8px 20px rgba(0,0,0,.4);
+  }
+
+  .scrollTopBtn:hover {
+    background: rgba(60, 60, 65, 0.9);
+    color: #fff;
+    border-color: rgba(200, 200, 200, 0.3);
+  }
+}

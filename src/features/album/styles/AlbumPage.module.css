@@ -32,6 +32,25 @@
   margin-right: 0;
 }
 
+.groupimg img { display:block; width:100%; height:auto; border-radius:12px; }
+
+/* 데이터 없을 때 플레이스홀더 */
+.imgPlaceholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f5f7fb, #eef1f6);
+  border: 1px solid #e5e9f2;
+}
+
+/* 접근성을 위해 버튼으로 */
+.homeIcon {
+  display:grid; place-items:center;
+  width:44px; height:44px; border:0; border-radius:10px;
+  background:#fff; color:#0e3270; box-shadow:0 6px 18px rgba(0,0,0,.1);
+  cursor:pointer;
+}
+.homeIcon:hover{ transform: translateY(-1px); }
 
 .AlbumPage :where(.contentTable) {
   margin-left: 0;

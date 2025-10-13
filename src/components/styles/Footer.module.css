@@ -1,0 +1,41 @@
+.footer {
+  background: #f9fafc;
+  border-top: 1px solid #e4e7ef;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);
+  margin-top: 48px;
+  padding: 28px 0 32px;
+  font-family: "Pretendard", "Inter", system-ui, sans-serif;
+  color: #444;
+}
+
+.footerInner {
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.footerLogo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0e3270;
+  margin-bottom: 4px;
+}
+
+.footerDesc {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 14px;
+}
+
+.footerCopy {
+  font-size: 13px;
+  color: #999;
+}
+
+/* 반응형 */
+@media (max-width: 520px) {
+  .footer { padding: 24px 0 28px; }
+  .footerLogo { font-size: 20px; }
+  .footerDesc { font-size: 13px; }
+}

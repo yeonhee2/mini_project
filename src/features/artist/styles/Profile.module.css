@@ -1,12 +1,21 @@
 :root {
   --pf-border: #e7e7f1;
   --pf-shadow: 0 10px 28px rgba(0,0,0,.06);
+
+  /* 🔽 사이즈 토큰(브레이크포인트에서만 값 변경) */
+  --pf-gap: 16px;
+  --pf-pad: 14px;
+  --pf-radius: 16px;
+  --pf-icon: 45px;
+  --pf-icon-gap: 6px;
+  --pf-h3: 24px;
+  --pf-p: 19px;
 }
 
 /* 그리드 래퍼 */
 .Profile {
   display: grid;
-  gap: 16px;
+  gap: var(--pf-gap);
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
@@ -15,8 +24,8 @@
   position: relative;
   display: grid;
   gap: 10px;
-  padding: 14px;
-  border-radius: 16px;
+  padding: var(--pf-pad);
+  border-radius: var(--pf-radius);
   border: 1px solid var(--pf-border);
   background: #fff;           /* data.color가 인라인으로 덮어씌워짐 */
   box-shadow: var(--pf-shadow);
@@ -31,9 +40,9 @@
 /* 프로필 이미지 */
 .memberBox img {
   width: 100%;
-  aspect-ratio: 1 / 1.1; /* 세로 조금 긴 사각형이 더 자연스러움 */
+  aspect-ratio: 1 / 0.95;  /* 🔹 세로 비율 줄임 (1 / 1.1 → 1 / 0.95) */
   object-fit: cover;
-  object-position: 50% 35%;  /* 약간 위쪽 포커스 */
+  object-position: 50% 40%;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,.06);
   background: #f3f4f8;
@@ -43,27 +52,28 @@
 /* 텍스트 */
 .memberBox h3 {
   margin: 2px 0 0;
-  font-size: 24px;
+  font-size: var(--pf-h3);
   line-height: 1.25;
   letter-spacing: .2px;
 }
 .memberBox p {
   margin: 0;
-  font-size: 19px;
+  font-size: var(--pf-p);
 }
 
 /* SNS 아이콘들 (카드 하단) */
 .memberBox a {
-  width: 45px;
-  height: 45px;
-  display: inline-grid;
+  width: var(--pf-icon);
+  height: var(--pf-icon);
+  display: grid;
   place-items: center;
   border-radius: 8px;
   border: 1px solid rgba(0,0,0,.08);
   background: rgba(255,255,255,.85);
   backdrop-filter: blur(2px);
-  margin-right: 6px;
+  margin-right: var(--pf-icon-gap);
   transition: transform .1s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+  font-size: calc(var(--pf-icon) * 0.65);
 }
 .memberBox a:hover {
   transform: translateY(-1px);
@@ -72,13 +82,115 @@
   border-color: #d7d7e6;
 }
 
-/* 반응형 */
+/* SNS 아이콘 묶음을 가로로 정렬 */
+.snsBox {
+  display: flex;                /* 🔹 가로 정렬 */
+  flex-wrap: wrap;              /* 좁을 때 자동 줄바꿈 */
+  gap: 6px;                     /* 아이콘 간격 */
+  margin-top: 6px;              /* 위쪽 여백 */
+}
+
+/* ========== 반응형 (Compact Ver.) ========== */
+
+/* 1400↓ : 살짝 축소 */
+@media (max-width: 1400px) {
+  :root{
+    --pf-gap: 14px;
+    --pf-pad: 10px;
+    --pf-radius: 14px;
+    --pf-icon: 40px;
+    --pf-h3: 21px;
+    --pf-p: 17px;
+  }
+}
+
+/* 1200↓ : 3열 */
 @media (max-width: 1200px) {
   .Profile { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  :root{
+    --pf-gap: 12px;
+    --pf-pad: 10px;
+    --pf-radius: 14px;
+    --pf-icon: 36px;
+    --pf-h3: 20px;
+    --pf-p: 16px;
+  }
 }
+
+/* 992↓ : 더 축소 */
+@media (max-width: 992px) {
+  :root{
+    --pf-gap: 10px;
+    --pf-pad: 9px;
+    --pf-radius: 13px;
+    --pf-icon: 34px;
+    --pf-icon-gap: 5px;
+    --pf-h3: 19px;
+    --pf-p: 15px;
+  }
+  .memberBox img{ aspect-ratio: 1 / 1.02; object-position: 50% 38%; }
+}
+
+/* 860↓ : 2열 */
 @media (max-width: 860px) {
   .Profile { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  :root{
+    --pf-gap: 10px;
+    --pf-pad: 8px;
+    --pf-radius: 12px;
+    --pf-icon: 32px;
+    --pf-h3: 18px;
+    --pf-p: 14px;
+  }
+  .memberBox img{ aspect-ratio: 1 / 0.95; }
 }
+
+/* 680↓ : 모바일 준비 */
+@media (max-width: 680px) {
+  :root{
+    --pf-gap: 8px;
+    --pf-pad: 8px;
+    --pf-radius: 12px;
+    --pf-icon: 30px;
+    --pf-icon-gap: 4px;
+    --pf-h3: 17px;
+    --pf-p: 13.5px;
+  }
+  .memberBox img{ aspect-ratio: 1 / 0.92; }
+  .memberBox a { font-size: 20px; }
+}
+
+/* 520↓ : 1열 */
 @media (max-width: 520px) {
   .Profile { grid-template-columns: 1fr; }
+  :root{
+    --pf-gap: 8px;
+    --pf-pad: 8px;
+    --pf-radius: 12px;
+    --pf-icon: 30px;
+    --pf-h3: 17px;
+    --pf-p: 13px;
+  }
+  .memberBox {
+    padding: 6px;
+  }
+  .memberBox img {
+    aspect-ratio: 1 / 0.88;  /* 카드 전체 높이 ↓ */
+  }
+  .memberBox a { font-size: 17px; }
+}
+
+/* 380↓ : 가장 작은 폰 */
+@media (max-width: 380px) {
+  :root{
+    --pf-gap: 6px;
+    --pf-pad: 6px;
+    --pf-radius: 10px;
+    --pf-icon: 26px;
+    --pf-icon-gap: 3px;
+    --pf-h3: 15px;
+    --pf-p: 12px;
+  }
+  .memberBox img{ aspect-ratio: 1 / 0.86; border-radius: calc(var(--pf-radius) - 2px); }
+  .memberBox a { font-size: 14px; }
 }
