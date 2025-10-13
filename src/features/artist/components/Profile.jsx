@@ -15,23 +15,24 @@ function Profile({group}) {
               <h3>{data.name}</h3>
               <p>{age != null ? `${age}세 (만 나이)` : '-'}</p>
               <p>{data.birthday}</p>
-              { data.instagram === " " ? " "
-                : 
-                <a href={data.instagram} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faInstagram} size='2x' /></a>
-              }
-              { data.yutube === " " ? " "
-                :
-                <a href={data.yutube} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faYoutube} size='2x' /></a>
-              }
-              { data.x === " " ? " "
-                : 
-                <a href={data.x} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faXTwitter} size='2x' /></a>
-              }
-              { data.x2 === " " ? " "
-                :              
-                <a href={data.x2} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faXTwitter} size='2x'/></a>
-              }
-
+              <div className={styles.snsBox}>
+                { data.instagram === " " ? " "
+                  : 
+                  <a href={data.instagram} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faInstagram}/></a>
+                }
+                { data.yutube === " " ? " "
+                  :
+                  <a href={data.yutube} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faYoutube}  /></a>
+                }
+                { data.x === " " ? " "
+                  : 
+                  <a href={data.x} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faXTwitter} /></a>
+                }
+                { data.x2 === " " ? " "
+                  :              
+                  <a href={data.x2} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faXTwitter} /></a>
+                }
+              </div>
             </div>
           ) 
         })
