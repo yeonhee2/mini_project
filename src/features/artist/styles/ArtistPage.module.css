@@ -7,6 +7,8 @@
   --ap-card: #fff;
   --ap-shadow: 0 10px 28px rgba(0,0,0,.06);
   --ap-accent: #6b4ef3;        /* 포인트 컬러 */
+  --ap-bg: #fff;            /* ← 누락되어 투명해지던 값 (콘텐츠 배경) */
+  --ap-page: #f7f8fb;       /* (선택) 페이지 바탕색 */
 }
 
 .ArtistPage {
@@ -14,6 +16,7 @@
   margin: 18px auto 40px;
   padding: 0 var(--ap-gutter);
   color: var(--ap-text);
+  background: var(--ap-page); /* (선택) 페이지 배경 */
 }
 
 /* ====== 상단 영상 + SNS ====== */
@@ -65,7 +68,7 @@
 .artistPageNav {
   position: sticky;
   top: 54px;                  /* 상단 헤더가 있다면 맞춰 조정 */
-  z-index: 1;
+  z-index: 5; 
   margin: 10px 0 14px;
 }
 .menu {
@@ -100,8 +103,9 @@
 /* ====== 탭 콘텐츠 ====== */
 .content {
   position: relative;
-  z-index: 2;        /* ← 콘텐츠가 더 위 */
+  z-index: 10;        /* ← 콘텐츠가 더 위 */
   background: var(--ap-bg); /* 틈 사이로 비치지 않도록(선택) */
+  isolation: isolate;        /* 자체 스태킹 컨텍스트 생성 (z-index 충돌 예방) */
   padding-bottom: 12px;     /* 마지막 줄 여백(선택) */
 }
 
