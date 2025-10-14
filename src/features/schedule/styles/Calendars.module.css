@@ -50,6 +50,9 @@
   color:#5b6273; text-align:center; font-weight:700;
 }
 
+:global(.fc-other-month) {
+  visibility: hidden;
+}
 /* ====== FullCalendar 공통 ====== */
 :global(.fc){
   font-family: "Pretendard","Inter",system-ui,Segoe UI,Roboto,Arial,sans-serif;

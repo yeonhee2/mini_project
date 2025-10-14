@@ -30,6 +30,7 @@ export default function Calendars({ artist, album, concert }) {
   const listRef = useRef(null);
   const isMobile = useIsMobile();
   const [listAnchor, setListAnchor] = useState(null);
+  const [listBase, setListBase] = useState(null);
   const monthWrapRef = useRef(null);
   const listWrapRef  = useRef(null);
   const koNoAllDay = useMemo(() => ({ ...koLocale, allDayText: "" }), []);
@@ -120,6 +121,8 @@ export default function Calendars({ artist, album, concert }) {
     setListAnchor(new Date(date));
   };
 
+  const skipOnceRef = useRef(false);
+
   // ✅ 월간(prev/next/today 등) 이동 시 호출
   const onMonthDatesSet = () => {
     // 제목에 표시된 '그 달'을 대표하는 날짜
@@ -137,10 +140,24 @@ export default function Calendars({ artist, album, concert }) {
 
     // 리스트 시작은 오늘이 그 달이면 오늘, 아니면 그 달 1일
     const today = new Date();
-    const base = (today >= monthStart && today < monthEnd) ? today : monthStart;
+
+    // allEvents에서 해당 달의 가장 이른 일정일
+    const firstEventDate =
+      allEvents
+        .map(ev => new Date(ev.start))
+        .filter(d => d >= monthStart && d < monthEnd)
+        .sort((a, b) => a - b)[0] || null;
+
+
+    // 오늘이 그 달이면 오늘, 아니면 첫 일정일(없으면 1일)
+    const base = (today >= monthStart && today < monthEnd)
+      ? today
+      : (firstEventDate || monthStart);
+    setListBase(base);
     const api = listRef.current?.getApi();
     api?.gotoDate(base);
     setListAnchor(new Date(base));
+    skipOnceRef.current = true;
   };
 
   useEffect(() => {
@@ -170,6 +187,41 @@ export default function Calendars({ artist, album, concert }) {
     };
   }, [isMobile]);
 
+  useEffect(() => {
+    if (!monthRange.start || !monthRange.end || !listRef.current) return;
+    
+    if (skipOnceRef.current) {    // 첫 실행은 건너뛰기
+      skipOnceRef.current = false;
+      return;
+    }
+
+    const api = listRef.current.getApi();
+    const viewStart = api.view.currentStart; // 현재 리스트 주 시작
+    const viewEnd   = api.view.currentEnd;   // 현재 리스트 주 끝(다음 주 시작)
+
+    const hasThisWeek = monthFilteredEvents.some(ev => {
+      const s = new Date(ev.start);
+      const e = new Date(ev.end || ev.start);
+      return s < viewEnd && e >= viewStart; // 주와 겹치면 일정 있음
+    });
+
+    if (!hasThisWeek) {
+      const monthEvs = monthFilteredEvents
+        .map(ev => ({ d: new Date(ev.start), ev }))
+        .sort((a, b) => a.d - b.d);
+
+      // 현재 주 이후 가장 가까운 일정(없으면 이전으로)
+      const next =
+        monthEvs.find(x => x.d >= viewEnd)?.d ||
+        [...monthEvs].reverse().find(x => x.d < viewStart)?.d;
+
+      if (next) {
+        api.gotoDate(next);
+        setListAnchor(new Date(next));
+      }
+    }
+  }, [monthRange, monthFilteredEvents]);
+
   const colorLegend = useMemo(() => {
     const map = new Map();
 
@@ -180,7 +232,14 @@ export default function Calendars({ artist, album, concert }) {
 
     // concert: 그룹 색상
     (concert || []).forEach((c) => {
-      if (c?.group && c?.color) map.set(c.group, c.color);
+      if (Array.isArray(c.concertdate)) {
+        c.concertdate.forEach((cd) => {
+          const key = cd.artistname || c.group;  // 세부 유닛 우선, 없으면 상위 그룹
+          if (key && cd.color) {
+            map.set(key, cd.color);
+          }
+        });
+      }
     });
 
     // album: 곡 주체(솔로/그룹) 색상
@@ -233,12 +292,12 @@ export default function Calendars({ artist, album, concert }) {
             views={{
               dayGridMonth: { eventDisplay: 'none', displayEventTime: false }
             }}
-            dayCellDidMount={(arg) => {
-              const anchor = monthRef.current?.getApi()?.getDate() ?? new Date();
-              if (arg.el.classList.contains("fc-day-other") || arg.date.getMonth() !== anchor.getMonth()) return;
+            dayCellDidMount={(info) => {
+              // 비월 셀은 FullCalendar가 클래스로 구분 → 이것만 제외
+              if (info.el.classList.contains("fc-day-other")) return;
 
               // 중복 wrap 제거
-              const frame = arg.el.querySelector(".fc-daygrid-day-frame");
+              const frame = info.el.querySelector(".fc-daygrid-day-frame");
               if (!frame) return;
               frame.style.position = "relative";
               frame.querySelector(".fc-dots-wrap")?.remove();
@@ -250,7 +309,7 @@ export default function Calendars({ artist, album, concert }) {
                 const da = String(d.getDate()).padStart(2, "0");
                 return `${y}-${m}-${da}`;
               };
-              const cellISO = ymdLocal(arg.date);
+              const cellISO = ymdLocal(info.date);
               const dayEvents = allEvents.filter((ev) => {
                 const s = ev.start;        // 이미 YYYY-MM-DD로 정규화되어 있음
                 const e = ev.end || s;     // 종일 단일 이벤트
@@ -292,7 +351,7 @@ export default function Calendars({ artist, album, concert }) {
                 wrap.appendChild(dot);
               });
 
-              frame.appendChild(wrap); 
+              frame.appendChild(wrap);
             }}
           />
         </div>
@@ -301,14 +360,15 @@ export default function Calendars({ artist, album, concert }) {
         <div ref={listWrapRef} className={styles.list}>
           <FullCalendar
             plugins={[listPlugin]}
-            key={monthRange.start?.toISOString() || "list-init"}
+            key={listBase?.toISOString() || monthRange.start?.toISOString() || "list-init"}
             ref={listRef}
             locale={koNoAllDay}
             initialView="listWeek"
+            initialDate={listBase || monthRange.start || new Date()}
             headerToolbar={false}
             height="100%"
             firstDay={0} 
-            noEventsContent={() => <div className={styles.noEventsBox}>일정이 없습니다</div>}
+            noEventsContent={<div className={styles.noEventsBox}>일정이 없습니다</div>}
             timeZone="local"
             listDayFormat={{ weekday: "short" }} // WED
             listDaySideFormat={{ day: "2-digit" }} // 23

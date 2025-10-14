@@ -15,8 +15,6 @@ import memskd from "../data/memschedule";
 
 /* =========================
    WeekPager (컴포넌트 포함)
-   - monthAnchor(그 달의 1일 기준)로 해당 달 표시 주(일~토) 배열 계산
-   - currentDate가 속한 주부터 인덱스 맞춰 표시
    ========================= */
 function useMonthWeeks_Sunday(monthAnchor) {
   return useMemo(() => {
@@ -119,20 +117,30 @@ export default function Schedule({
   const calendarRef = useRef(null);
   const monthRef = useRef(null);
   const listRef = useRef(null);
+  const skipOnceRef = useRef(false);
   const [monthRange, setMonthRange] = useState({ start: null, end: null });
+  const [listBase, setListBase] = useState(null);
 
   // “종일” 텍스트 제거
   const koNoAllDay = useMemo(() => ({ ...koLocale, allDayText: "" }), []);
 
-  // 한 곳에서 이벤트 합치고 키 통일
+  // === 이벤트 합치기 + 날짜 정규화 ===
   const allEvents = useMemo(() => {
-    const ymd = (d) => {
+    const ymdLocal = (d) => {
       const dt = d instanceof Date ? d : new Date(d);
       if (Number.isNaN(dt.getTime())) return null;
       const y = dt.getFullYear();
       const m = String(dt.getMonth() + 1).padStart(2, "0");
       const da = String(dt.getDate()).padStart(2, "0");
-      return `${y}-${m}-${da}`;
+      return `${y}-${m}-${da}`; // 로컬 기준 YYYY-MM-DD
+    };
+    const normalize = (val) => {
+      if (!val) return null;
+      if (typeof val === "string") {
+        if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val; // 이미 YYYY-MM-DD
+        return val.split("T")[0]; // '2025-10-11T..' → '2025-10-11'
+      }
+      return ymdLocal(val); // Date 객체
     };
     const arr = (v) => (Array.isArray(v) ? v : []);
 
@@ -144,13 +152,13 @@ export default function Schedule({
       ...arr(memskd(memschedule)),
     ]
       .map((ev) => {
-        const start = ev.start ?? ev.date ?? ev.startDate;
-        const end = ev.end ?? ev.endDate;
+        const start = normalize(ev.start ?? ev.date ?? ev.startDate);
+        const end = normalize(ev.end ?? ev.endDate);
         return {
           ...ev,
           title: (ev.title || "").replace(/\s+/g, " ").trim(),
-          start: start ? ymd(start) : null,
-          ...(end ? { end: ymd(end) } : {}),
+          start,
+          ...(end ? { end } : {}),
           allDay: true,
           extendedProps: { ...(ev.extendedProps || {}), type: ev.type },
         };
@@ -172,18 +180,26 @@ export default function Schedule({
     return uniq;
   }, [performance, group, album, schedule, memschedule]);
 
+  // === 해당 달과 '겹치는' 이벤트 포함 ===
   const monthFilteredEvents = useMemo(() => {
     if (!monthRange.start || !monthRange.end) return [];
+
+    const ymd = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const da = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${da}`;
+    };
+
+    const startISO = ymd(monthRange.start); // inclusive
+    const endISO   = ymd(monthRange.end);   // exclusive
+
+    // ev.start/ev.end는 allEvents에서 이미 YYYY-MM-DD로 정규화됨
     return allEvents.filter((ev) => {
-      const s = new Date(ev.start);
-      return s >= monthRange.start && s < monthRange.end;
+      const s = ev.start;              // 'YYYY-MM-DD'
+      const e = ev.end || ev.start;    // 단일이면 start = end
+      return s < endISO && e >= startISO; // 문자열 비교! (타임존 영향 X)
     });
-    // ‘달과 겹치면 포함’ 로직이 필요하면 아래로 교체:
-    // return allEvents.filter((ev) => {
-    //   const s = new Date(ev.start);
-    //   const e = new Date(ev.end || ev.start);
-    //   return s < monthRange.end && e >= monthRange.start;
-    // });
   }, [allEvents, monthRange]);
 
   /* ===== 헤더/버튼 색상(옵션: 그룹 테마) ===== */
@@ -203,41 +219,60 @@ export default function Schedule({
     });
   }, [group]);
 
-  // 🔧 그룹 색 + 멤버 개인 색(중복 제거)으로 범례 만들기
+  // 🔧 그룹 색 + 개인/유닛 색(중복 제거)으로 범례 만들기
   const colorLegend = useMemo(() => {
     const map = new Map();
+    const norm = (s) => (s || "").trim();
 
     // 1) 그룹(필수)
-    if (group?.group && group?.color) {
-      map.set(group.group, group.color);
-    }
+    if (group?.group && group?.color) map.set(group.group, group.color);
 
-    // 2) 그룹 객체에 멤버가 들어있는 경우 (group.member 또는 group.members)
+    // 2) 멤버
     (group?.member || group?.members || []).forEach((m) => {
-      const name = m?.name || m?.nick || m?.label;
+      const name = norm(m?.name || m?.nick || m?.label);
       const color = m?.color;
       if (name && color && !map.has(name)) map.set(name, color);
     });
 
-    // 3) 개인 스케줄 데이터에 색/이름이 있는 경우도 보강 (옵션)
-    //   memschedule가 배열이라면, 항목에 이름/색이 있으면 추가
+    // 3) 개인 스케줄
     (Array.isArray(memschedule) ? memschedule : []).forEach((it) => {
-      const name = it?.name || it?.member || it?.artist;
+      const name = norm(it?.name || it?.member || it?.artist);
       const color = it?.color;
       if (name && color && !map.has(name)) map.set(name, color);
     });
 
-    // 보기 좋게: 그룹을 맨 앞, 이후 멤버명 가나다/알파벳 순 정렬
+    // 4) performance
+    const perfList = Array.isArray(performance)
+      ? performance
+      : performance
+      ? [performance]
+      : [];
+    perfList.forEach((p) => {
+      const dates = Array.isArray(p?.concertdate)
+        ? p.concertdate
+        : Array.isArray(p?.sd)
+        ? p.sd
+        : [];
+      dates.forEach((d) => {
+        const name = norm(d?.artistname || d?.cast || p?.group);
+        const color = d?.color || p?.color || group?.color;
+        if (!name || !color) return;
+        if (name === group?.group && map.has(name)) return; // 그룹 공식색 보존
+        if (!map.has(name)) map.set(name, color);
+      });
+    });
+
     const entries = Array.from(map, ([label, color]) => ({ label, color }));
-    const groupFirst = entries.findIndex(e => e.label === group?.group);
-    if (groupFirst > 0) {
-      const [g] = entries.splice(groupFirst, 1);
-      entries.sort((a, b) => a.label.localeCompare(b.label, 'ko')); // 멤버 정렬
+    const idx = entries.findIndex((e) => e.label === group?.group);
+    if (idx > 0) {
+      const [g] = entries.splice(idx, 1);
+      entries.sort((a, b) =>
+        a.label.localeCompare(b.label, "ko", { sensitivity: "base" })
+      );
       entries.unshift(g);
-      return entries;
     }
     return entries;
-  }, [group, memschedule]);
+  }, [group, memschedule, performance]);
 
   /* ===== 타입 범례 ===== */
   const typeLegend = [
@@ -252,33 +287,86 @@ export default function Schedule({
   const [monthAnchor, setMonthAnchor] = useState(new Date());
   const [listAnchor, setListAnchor] = useState(null);
 
+  const weekStartOf = (date) => {
+    const d = new Date(date);
+    d.setHours(0,0,0,0);
+    d.setDate(d.getDate() - d.getDay()); // 일요일 시작
+    return d;
+  };
+
   const gotoList = (date) => {
     const api = listRef.current?.getApi();
     if (!api) return;
     api.gotoDate(date);
     setListAnchor(new Date(date));
+    skipOnceRef.current = true; // 점프 직후 1회 스킵
   };
 
-  // 월간 이동 시: anchor 보관 + 리스트 이동(오늘이 보이는 범위면 오늘 주, 아니면 1주차)
+  // 월간 이동 시: anchor 보관 + 리스트 이동(오늘이 보이는 범위면 오늘 주, 아니면 첫 일정일/1일)
   const onMonthDatesSet = () => {
     const anchorDate = monthRef.current?.getApi()?.getDate() ?? new Date();
-
     const y = anchorDate.getFullYear();
     const m = anchorDate.getMonth();
-    const monthStart = new Date(y, m, 1);   // inclusive
-    const monthEnd   = new Date(y, m + 1, 1); // exclusive
+    const monthStart = new Date(y, m, 1);
+    const monthEnd   = new Date(y, m + 1, 1);
     setMonthRange({ start: monthStart, end: monthEnd });
-
-    // WeekPager anchor도 이 달로
     setMonthAnchor(monthStart);
 
-    // 오늘이 그 달이면 오늘로, 아니면 달 1일로 리스트 이동
     const today = new Date();
-    const base = (today >= monthStart && today < monthEnd) ? today : monthStart;
+    const firstEventDate =
+      allEvents
+        .map(ev => new Date(ev.start))
+        .filter(d => d >= monthStart && d < monthEnd)
+        .sort((a, b) => a - b)[0] || null;
+
+    const base = (today >= monthStart && today < monthEnd)
+      ? today
+      : (firstEventDate || monthStart);
+
+    const ws = weekStartOf(base);
     const api = listRef.current?.getApi();
-    api?.gotoDate(base);
-    setListAnchor(new Date(base));
+    api?.gotoDate(ws);
+    setListBase(ws);
+    setListAnchor(ws);
+    skipOnceRef.current = true;
   };
+
+
+  // 리스트 뷰: 빈 주면 가장 가까운 이벤트 주로 자동 점프
+  const onListDatesSet = () => {
+    const api = listRef.current?.getApi();
+    if (!api) return;
+    if (skipOnceRef.current) { skipOnceRef.current = false; return; }
+
+    setTimeout(() => {
+      const viewStart = api.view.currentStart;
+      const viewEnd   = api.view.currentEnd;
+
+      const hasThisWeek = monthFilteredEvents.some((ev) => {
+        const s = new Date(ev.start);
+        const e = new Date(ev.end || ev.start);
+        return s < viewEnd && e >= viewStart;
+      });
+
+      if (!hasThisWeek) {
+        const monthDates = monthFilteredEvents
+          .map(ev => new Date(ev.start))
+          .sort((a, b) => a - b);
+
+        const next = monthDates.find(d => d >= viewEnd) || monthDates[0];
+        if (next) {
+          const ws = weekStartOf(next);
+          api.gotoDate(ws);
+          setListAnchor(ws);
+          skipOnceRef.current = true;
+          return;
+        }
+      }
+      // 주가 확정됐으면 anchor를 현재 주 시작으로 동기화
+      setListAnchor(weekStartOf(viewStart));
+    }, 0);
+  };
+
 
   return (
     <div ref={calendarRef} className={styles.Schedule}>
@@ -292,63 +380,58 @@ export default function Schedule({
             initialView="dayGridMonth"
             headerToolbar={{ left: "prev today", center: "title", right: "next" }}
             locale={koLocale}
-            firstDay={0}          /* 일요일 시작 */
-            fixedWeekCount={false}        // 4~6주 가변
-            showNonCurrentDates={false}   // 이번 달 아닌 날짜 숨김
+            firstDay={0} /* 일요일 시작 */
+            fixedWeekCount={false} /* 4~6주 가변 */
+            showNonCurrentDates={false} /* 이번 달 아닌 날짜 숨김 */
             dayMaxEvents={false}
             datesSet={onMonthDatesSet}
-            events={[]}           /* 월간은 커스텀 도트만 그릴 거라 비움 */
+            events={[]} /* 월간은 커스텀 도트만 그릴 거라 비움 */
             height="auto"
-            viewDidMount={() => setTimeout(() => { /* 레이아웃 안정화용 */ }, 0)}
-            dayCellDidMount={(arg) => {
-              // ❶ 월간 그리드에서 이번 달(제목의 달) 구하기
-              //    anchor는 현재 월 뷰가 가리키는 날짜(해당 달 안의 아무 날)라서 안전합니다.
-              const anchor = monthRef.current?.getApi()?.getDate() ?? new Date();
-              if (arg.el.classList.contains("fc-day-other") || arg.date.getMonth() !== anchor.getMonth()) return;
+            viewDidMount={() => setTimeout(() => {}, 0)}
+            dayCellDidMount={(info) => {
+              if (info.el.classList.contains("fc-day-other")) return;
 
-              // ❸ 중복 wrap 제거
-              const frame = arg.el.querySelector('.fc-daygrid-day-frame');
+              const frame = info.el.querySelector(".fc-daygrid-day-frame");
               if (!frame) return;
-              frame.style.position = 'relative';
-              frame.querySelector('.fc-dots-wrap')?.remove();
+              frame.style.position = "relative";
+              frame.querySelector(".fc-dots-wrap")?.remove();
 
-              // ❹ ISO 날짜 문자열 비교
+              // ISO 문자열로만 비교 (타임존 영향 제거)
               const ymd = (d) => {
                 const y = d.getFullYear();
-                const m = String(d.getMonth() + 1).padStart(2, '0');
-                const da = String(d.getDate()).padStart(2, '0');
+                const m = String(d.getMonth() + 1).padStart(2, "0");
+                const da = String(d.getDate()).padStart(2, "0");
                 return `${y}-${m}-${da}`;
               };
-              const cellISO = ymd(arg.date);
+              const cellISO = ymd(info.date);
 
               const dayEvents = allEvents.filter((ev) => {
-                const s = ev.start;
+                const s = ev.start; // YYYY-MM-DD
                 const e = ev.end || s;
                 return s <= cellISO && cellISO <= e;
               });
 
-              // ❺ 점 컨테이너
-              const wrap = document.createElement('div');
-              wrap.className = 'fc-dots-wrap';
+              const wrap = document.createElement("div");
+              wrap.className = "fc-dots-wrap";
               Object.assign(wrap.style, {
-                position: 'absolute',
-                top: '50%',
-                left: '10px',
-                transform: 'translateY(-50%)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '6px',
-                pointerEvents: 'none',
-                zIndex: 2
+                position: "absolute",
+                top: "50%",
+                left: "10px",
+                transform: "translateY(-50%)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+                pointerEvents: "none",
+                zIndex: 2,
               });
 
               const DOT_SIZE = 12;
               const MAX_DOTS = 8;
 
               dayEvents.slice(0, MAX_DOTS).forEach((ev) => {
-                const dot = document.createElement('span');
-                dot.className = 'fc-dot';
-                const color = ev.color || ev.backgroundColor || '#00B6F0';
+                const dot = document.createElement("span");
+                dot.className = "fc-dot";
+                const color = ev.color || ev.backgroundColor || "#00B6F0";
                 dot.style.cssText = `
                   width:${DOT_SIZE}px;height:${DOT_SIZE}px;border-radius:50%;
                   display:inline-block;flex:0 0 ${DOT_SIZE}px;background:${color};
@@ -366,10 +449,11 @@ export default function Schedule({
         {/* 리스트(주간) + WeekPager */}
         <div className={styles.list}>
           <FullCalendar
-            key={monthRange.start?.toISOString() || "list-init"}
+            key={listBase?.toISOString() || monthRange.start?.toISOString() || "list-init"}
             plugins={[listPlugin]}
             ref={listRef}
             initialView="listWeek"
+            initialDate={listBase || monthRange.start || new Date()} 
             headerToolbar={false}
             locale={koNoAllDay}
             firstDay={0}
@@ -399,14 +483,20 @@ export default function Schedule({
 
               return { domNodes: [wrap] };
             }}
+            datesSet={onListDatesSet}
           />
 
-          {monthAnchor && (
+          {monthAnchor && listAnchor && (
             <WeekPager
-              key={monthAnchor?.toISOString() + "|" + (listAnchor?.toISOString?.() || "init")}
+              key={monthAnchor?.toISOString() + "|" + (listAnchor?.toISOString?.())}
               monthAnchor={monthAnchor}
-              currentDate={listAnchor}     // 초기엔 undefined여도 WeekPager가 1주차로 표시
-              onGotoWeek={(date) => gotoList(date)}
+              currentDate={listAnchor}
+              onGotoWeek={(date) => {
+                const ws = weekStartOf(date);
+                listRef.current?.getApi()?.gotoDate(ws);
+                setListAnchor(ws);
+                skipOnceRef.current = true;
+              }}
             />
           )}
         </div>
