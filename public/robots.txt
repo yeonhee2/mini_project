@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://idol-note.vercel.app/sitemap.xml
