@@ -1,0 +1,358 @@
+/* src/features/schedule/styles/CalendarShell.module.css */
+
+:root {
+  --hc-header-bg: #0e3270;
+  --hc-header-fg: #ffffff;
+  --hc-card: #fff;
+  --hc-border: #e8eaf1;
+  --hc-shadow: 0 12px 28px rgba(16, 24, 40, 0.06);
+  --hc-text: #1f2330;
+  --hc-muted: #6b7280;
+}
+
+/* =========================
+   Layout (CalendarShell expects these)
+   ========================= */
+.CalendarSection {
+  padding: 16px 0 28px;
+  background: transparent;
+}
+
+/* Desktop: 2 columns (month + list) */
+.Calendars {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 12px;
+
+  color: var(--hc-text);
+  align-items: start;
+}
+
+.month,
+.list {
+  background: var(--hc-card);
+  border: 1px solid var(--hc-border);
+  border-radius: 14px;
+  box-shadow: var(--hc-shadow);
+  overflow: hidden;
+}
+
+.month {
+  padding: 0; /* FullCalendar가 내부 padding 관리 */
+}
+
+.list {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* "일정이 없습니다" */
+.noEventsBox {
+  margin: 10px 12px 14px;
+  padding: 28px 16px;
+  background: #f3f5f9;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  color: #5b6273;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* =========================
+   FullCalendar common
+   ========================= */
+:global(.fc) {
+  font-family: "Pretendard", "Inter", system-ui, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 14px;
+  background: transparent;
+}
+
+:global(.fc .fc-header-toolbar) {
+  padding: 8px 12px;
+  background: var(--hc-header-bg);
+  color: var(--hc-header-fg);
+}
+
+:global(.fc .fc-toolbar-title) {
+  font-weight: 800;
+  color: var(--hc-header-fg);
+}
+
+:global(.fc .fc-button) {
+  background: var(--hc-header-bg);
+  color: var(--hc-header-fg);
+  border: 1px solid var(--hc-header-bg);
+  padding: 6px 10px;
+  line-height: 1.1;
+}
+:global(.fc .fc-button:hover) {
+  filter: brightness(1.05);
+}
+
+/* weekday header */
+:global(.fc-col-header-cell) {
+  background: #f3f5f9;
+  font-weight: 800;
+  color: #2b2f3a;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--hc-border);
+}
+
+/* month day cell */
+:global(.fc-daygrid-day) {
+  border: 1px solid #f1f2f6;
+}
+:global(.fc-daygrid-day:hover) {
+  background: #f9fbff;
+}
+
+/* hide non-current month cells */
+:global(.fc-daygrid .fc-day-other) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* =========================
+   Month dots (custom DOM)
+   ========================= */
+:global(.fc .fc-dots-wrap .fc-dot) {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}
+
+:global(.fc .fc-daygrid-month-view .fc-dots-wrap) {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* hide default month events (we draw dots only) */
+:global(.fc-daygrid-month-view .fc-daygrid-event),
+:global(.fc-daygrid-month-view .fc-event),
+:global(.fc-daygrid-month-view .fc-more-link),
+:global(.fc-daygrid-month-view .fc-daygrid-day-bottom),
+:global(.fc-daygrid-month-view .fc-bg-event) {
+  display: none !important;
+}
+
+/* =========================
+   List view
+   ========================= */
+.list :global(.fc) {
+  height: 100% !important;
+}
+
+:global(.fc-list) {
+  border: 0;
+}
+
+:global(.fc-list-table) {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+:global(.fc-list-day-cushion) {
+  border-top: 2px solid #1f2330;
+  background: #fff;
+  padding: 14px 8px 8px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+:global(.fc-list-event) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 4px 8px;
+}
+
+/* list event content */
+.evRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: #222;
+}
+
+.evTitle {
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+/* type badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  flex: 0 0 auto;
+}
+
+/* 큰 배지(리스트용) */
+.badgeLg {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+}
+
+/* type colors */
+.typeS { background: #f08fa1; }
+.typeR { background: #f5b35c; }
+.typeA { background: #9ad06a; }
+.typeE { background: #4ec3a6; }
+.typeT { background: #d9b24c; }
+
+/* =========================
+   WeekPager
+   ========================= */
+.weekPager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 0 12px;
+  color: #333;
+  font-weight: 900;
+}
+
+.weekBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #d9dbea;
+  background: #fff;
+  cursor: pointer;
+}
+
+.weekBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.weekPagerText {
+  min-width: 72px;
+  text-align: center;
+}
+
+/* =========================
+   Legend
+   ========================= */
+.legendWrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.legendBlock {
+  background: var(--hc-card);
+  border: 1px solid var(--hc-border);
+  border-radius: 12px;
+  box-shadow: var(--hc-shadow);
+  padding: 10px 12px;
+}
+
+.legendTitle {
+  font-weight: 900;
+  color: #2b2f3a;
+  margin-bottom: 8px;
+}
+
+.typeLegendRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.typeLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendText {
+  color: #1f2330;
+  font-size: 14px;
+}
+
+/* color legend */
+.colorLegendGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px 12px;
+}
+
+.colorLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.colorDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #dcdfea;
+}
+
+.legendEmpty {
+  color: #8a90a4;
+  font-size: 13px;
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 1024px) {
+  .Calendars {
+    grid-template-columns: 1fr;
+    max-width: 760px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .legendWrap {
+    grid-template-columns: 1fr;
+    margin-top: 12px;
+  }
+
+  :global(.fc) { font-size: 13px; }
+  :global(.fc-toolbar-title) { font-size: 16px !important; }
+
+  .weekBtn { width: 30px; height: 30px; }
+}
+
+@media (max-width: 430px) {
+  .Calendars {
+    max-width: 100%;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  :global(.fc) { font-size: 12px; }
+
+  .evRow { font-size: 13px; }
+  .badge, .badgeLg { width: 26px; height: 26px; font-size: 13px; }
+
+  .weekBtn { width: 28px; height: 28px; }
+}

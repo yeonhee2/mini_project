@@ -1,5 +1,6 @@
 .Header { 
   position: sticky;
+  top: 0;
   z-index: 200; 
   background:#e5e5e5; 
   border-bottom:1px solid rgba(0,0,0,.06); 
@@ -13,11 +14,16 @@
   padding: 0 20px;
   display: flex; 
   align-items: center; 
-  gap: 6px;              /* 로고와 메뉴 사이 좁게 */
+  gap: 12px;
+}
+
+/* ✅ 홈로고와 로고메뉴 사이 여백 */
+.homeLogo{
+  margin-right: 18px;
 }
 
 .homeLogo img {
-  height: 36px;
+  height: 34px;                 /* ✅ 홈로고도 살짝 다운 */
   width: auto;
   object-fit: contain;
   cursor: pointer;
@@ -36,14 +42,36 @@
   cursor: pointer;
   padding: 6px 8px;
 }
+
 .navPanel {
   margin-left: auto;
 }
 
+/* ✅ 로고 버튼(박스 완전 제거) */
+.logoBtn{
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.logoBtn:focus{ outline: none; }
+.logoBtn:focus-visible{ outline: none; }
+
+.logoBtn img{
+  display: block;
+}
+
+/* 메뉴 */
 .navMenu {
   display: flex;
   align-items: center;
-  gap: clamp(25px, 3.2vw, 45px); 
+  gap: clamp(22px, 3vw, 40px);   /* ✅ 간격 약간 정돈 */
   list-style: none; 
   margin: 0; 
   padding: 0;
@@ -51,69 +79,107 @@
   white-space: nowrap;
 }
 
+.navMenu li{
+  background: transparent;
+  border: 0;
+  flex: 0 0 auto;
+}
+
+/* ✅ 기본 로고: 조금 더 흐리게(활성 대비 ↑) + 사이즈 다운 */
 .navMenu li img {
-  display: block;
-  height: clamp(32px, 3vw, 44px);
+  height: clamp(26px, 2.4vw, 38px);   /* ✅ 기존 28~40 → 더 정돈 */
   width: auto; 
   object-fit: contain;
   -webkit-user-drag: none; 
   user-select: none;
   cursor: pointer;
-  transition: transform .18s ease, opacity .18s ease;
+
+  opacity: 0.55;
+  filter: grayscale(100%);
+  transition: transform .18s ease, opacity .18s ease, filter .18s ease;
 }
 
 .navMenu li img:hover {
-  transform: translateY(-1px) scale(1.03);
-  opacity: .95;
+  transform: translateY(-1px) scale(1.04);
+  opacity: 0.85;
+  filter: grayscale(30%);
 }
 
-/* NMIXX 로고만 크기 줄이기 (5번째 항목) */
+/* NMIXX 로고만 크기 살짝 더 줄이기 (NMIXX가 유독 커서) */
 .navMenu li:nth-child(5) img {
-  height: clamp(30px, 2.7vw, 40px);
+  height: clamp(24px, 2.2vw, 34px);
 }
 
-.homeLogo,
-.navMenu li {
-  cursor: pointer;
-  flex: 0 0 auto;
+/* ✅ 현재 페이지 로고 강조 (박스 ❌, 확실하게) */
+.logoBtn.activeLogo{
+  position: relative;
 }
 
-.menuToggle:hover { background: rgba(0,0,0,.06); }
-.menuToggle:active { transform: scale(.98); }
-.menuToggle:focus-visible { outline: 2px solid #00B6F0; outline-offset: 2px; }
+.logoBtn.activeLogo img {
+  opacity: 1 !important;
+  filter: grayscale(0%) !important;
+  transform: scale(1.10);
+}
 
+/* ✅ 밑줄을 더 명확하게 */
+.logoBtn.activeLogo::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 3px;
+  background: rgba(0,0,0,.45);
+  border-radius: 999px;
+}
+
+/* 데스크탑 큰 화면 */
 @media (min-width: 1280px) {
-  .navMenu { gap: 36px; }         /* 필요 시 28~36px 사이로 조절 */
+  .navMenu { gap: 36px; }
 }
 
 /* 반응형 */
 @media (max-width: 1024px) {
   .HeaderInner { height: 62px; }
-  .navMenu { gap: 25px; }
-  .navMenu li img { height: 30px;  }
-  .navMenu li:nth-child(5) img { height: 28px; }
+  .homeLogo img { height: 32px; }
+  .navMenu { gap: 24px; }
+  .navMenu li img { height: 28px; }
+  .navMenu li:nth-child(5) img { height: 26px; }
+
+  .activeLogo::after{
+    bottom: -9px;
+    width: 30px;
+  }
 }
 
 @media (max-width: 768px) {
-  .HeaderInner { height: 68px; position: relative; } /* navPanel 기준이 되도록 */
+  .HeaderInner { height: 68px; position: relative; }
 
   .menuToggle {
     display: inline-flex;
     z-index: 3;
-    align-items: center; justify-content: center;
-    width: 44px; height: 44px;
-    border: none; background: transparent;
-    font-size: 22px; line-height: 1; cursor: pointer;
-    border-radius: 10px; margin-left: auto;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-left: auto;
     transition: background .15s ease, transform .1s ease;
   }
+  .menuToggle:hover { background: rgba(0,0,0,.06); }
+  .menuToggle:active { transform: scale(.98); }
+  .menuToggle:focus-visible { outline: 2px solid #00B6F0; outline-offset: 2px; }
 
-  /* ▼ 드롭다운 패널: 헤더 바로 아래로 내리기 + 높이 자동 */
   .navPanel {
     position: absolute;
-    left: 0; right: 0;
-    top: 68px;           /* HeaderInner 높이와 동일하게 */
-    display: none;       /* 기본 닫힘 */
+    left: 0;
+    right: 0;
+    top: 68px;
+    display: none;
     z-index: 2;
   }
   .navPanel.open {
@@ -128,31 +194,45 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
-    margin: 0; padding: 0; list-style: none;
+    margin: 0;
+    padding: 0;
   }
-  .navMenu li { display: flex; align-items: center; justify-content: center; }
 
-  /* ▼ 이미지 크기: max-height 제거 (충돌 원인) */
+  .navMenu li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .navMenu li img {
-    height: 22px;        /* 필요하면 24px까지 무난 */
-    width: auto; object-fit: contain;
-    user-select: none; -webkit-user-drag: none;
-    transition: transform .15s ease, opacity .15s ease;
+    height: 22px;
+    opacity: 0.6;
+    filter: grayscale(100%);
   }
-  .navMenu li img:hover { transform: translateY(-1px) scale(1.03); opacity: .95; }
 
-  /* NMIXX만 살짝 축소 — 중복 선언 제거 */
+  .logoBtn.activeLogo img {
+    opacity: 1 !important;
+    filter: grayscale(0%) !important;
+    transform: scale(1.08);
+  }
+
+  .activeLogo::after{
+    bottom: -8px;
+    width: 26px;
+    height: 3px;
+  }
+
   .navMenu li:nth-child(5) img { height: 20px; }
 }
 
 @media (max-width: 380px) {
   .navMenu { gap: 12px; }
-  .navMenu li img {
-    height: 18px;
-    max-height: 18px;
-  }
-  .navMenu li:nth-child(5) img {
-    height: 16px;
-    max-height: 16px;
+  .navMenu li img { height: 18px; }
+  .navMenu li:nth-child(5) img { height: 16px; }
+
+  .activeLogo::after{
+    bottom: -7px;
+    width: 22px;
+    height: 2px;
   }
 }

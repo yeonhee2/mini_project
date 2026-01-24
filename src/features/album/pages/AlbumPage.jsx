@@ -1,159 +1,250 @@
-import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
-import {useLocation, useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { faHouse, faMusic, faRadio, faTv, faVideo } from "@fortawesome/free-solid-svg-icons";
+
 import UseNavi from "../../../hooks/UseNavi";
 import ContentTable from "../components/ContentTable";
 import styles from "../styles/AlbumPage.module.css";
 import Spinners from "../../../components/ui/Spinner";
-
-const GROUP_COLORS = {
-  day6: "#0F2B66",
-  twice: "#ff91b6",
-  straykids: "#8b0000",
-  itzy: "#b7b1ff",
-  nmixx: "#00e2ff",
-  niziu: "#ffe600",
-};
+import { frontApi } from "@/api/frontApi";
 
 function AlbumPage() {
-  const {goIndex} = UseNavi()
-  const location = useLocation()
+  const { goIndex } = UseNavi();
+  const location = useLocation();
   const params = useParams();
 
   const albumKey = useMemo(() => {
-    return location?.state?.group || params.group
-  }, [location, params]) 
+    return location?.state?.group || params.group;
+  }, [location, params]);
 
-  const [albumDetail, setAlbumDetail] = useState([])
-  const [pageLoading, setPageLoading] = useState(true)
-  const [imgLoading, setImgLoading] = useState(true)
-  const [imgRatioClass, setImgRatioClass] = useState("");
-  
+  const [albumDetail, setAlbumDetail] = useState({});
+  const [albumList, setAlbumList] = useState([]); // 원본(중복 포함) 리스트
+  const [selectedAlbumId, setSelectedAlbumId] = useState(null);
+
+  const [pageLoading, setPageLoading] = useState(true);
+
+  // albumId 기준으로 중복 제거한 "셀렉트용" 리스트
+  const uniqueAlbumList = useMemo(() => {
+    const map = new Map();
+
+    for (const a of albumList) {
+      // ✅ GROUP만
+      if (a?.groupsolo !== "GROUP") continue;
+
+      if (a?.albumId == null) continue;
+      if (!map.has(a.albumId)) map.set(a.albumId, a);
+    }
+
+    return Array.from(map.values());
+  }, [albumList]);
+
+  // =========================
+  // 그룹 들어오면 앨범 목록 로드 (셀렉트 옵션)
+  // =========================
   useEffect(() => {
     if (!albumKey) return;
-    setPageLoading(true)
-    axios.get(`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/${albumKey}.json`)
-     .then((response) => {
-      const detail = response.data?.[0] || {}
-       setAlbumDetail(detail)
-       setImgLoading(!!detail.images)
-     })
-     .catch((error) => {
-      console.error(error)
-      setAlbumDetail([])
-      setImgLoading(false)
-     }).finally(() => {
-      setPageLoading(false)
-     })
-  }, [albumKey])
 
-  const brandColor =
-    albumDetail?.color ||
-    GROUP_COLORS?.[albumKey?.toLowerCase?.()] ||
-    "#6b7280";
+    frontApi
+      .getAlbum(albumKey)
+      .then((res) => {
+        // requestHandler가 data를 풀어주면 res가 dto일 수도 있고,
+        // ApiResponse 형태면 res.data.data에 들어있을 수 있음
+        const dto = res?.data?.data ?? res?.data ?? res ?? {};
+        const list = dto?.music ?? [];
 
-  const onImgLoad = (e) => {
-    const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
-    const r = w / h;
-    // 임계값은 살짝 여유 있게 (원본 DAY6는 와이드)
-    if (r >= 1.3) setImgRatioClass("wide");
-    else if (r <= 0.9) setImgRatioClass("tall");
-    else setImgRatioClass("square");
-    setImgLoading(false); 
-  };
+        setAlbumList(list);
 
-  
-  return(
+        // 기본 선택: albumId 중복 제거 후 첫 번째(최신) 앨범
+        const map = new Map();
+        for (const a of list) {
+          if (a?.groupsolo !== "GROUP") continue; // GROUP만
+          if (a?.albumId == null) continue;
+          if (!map.has(a.albumId)) map.set(a.albumId, a);
+        }
+        const unique = Array.from(map.values());
+        setSelectedAlbumId(unique?.[0]?.albumId ?? null);
+      })
+      .catch((err) => {
+        console.error(err);
+        setAlbumList([]);
+        setSelectedAlbumId(null);
+      });
+  }, [albumKey]);
+
+  // =========================
+  // 2) 선택된 albumId로 상세 + 활동내역 로드
+  // =========================
+  useEffect(() => {
+    if (!albumKey) return;
+
+    setPageLoading(true);
+
+    const req = selectedAlbumId
+      ? frontApi.getAlbumDetailByAlbumId(albumKey, selectedAlbumId)
+      : frontApi.getLatestAlbumDetail(albumKey);
+
+    req
+      .then((res) => {
+        const detail = res?.data?.data ?? res?.data ?? res ?? {};
+        setAlbumDetail(detail);
+      })
+      .catch((err) => {
+        console.error(err);
+        setAlbumDetail({});
+      })
+      .finally(() => setPageLoading(false));
+  }, [albumKey, selectedAlbumId]);
+
+  const brandColor = albumDetail?.color || "#6b7280";
+
+  return (
     <div className={styles.AlbumPage}>
-      <section style={{ position: "relative"}}>
-        {(pageLoading || (imgLoading && !!albumDetail?.images)) && (
+      <section style={{ position: "relative" }}>
+        {pageLoading && (
           <Spinners size={28} label="앨범 정보 불러오는 중..." color={brandColor} showLabel position="container" />
         )}
+
         <div className={styles.information} aria-busy={pageLoading}>
-          <div className={`${styles.groupimg} ${styles[imgRatioClass]}`}>
+          <div className={styles.groupimg}>
             {albumDetail?.images ? (
               <img
                 src={albumDetail.images}
-                alt={albumDetail.name}
+                alt={albumDetail.name || "album image"}
                 loading="lazy"
-                onLoad={onImgLoad}
-                onError={() => setImgLoading(false)}
               />
             ) : (
-              // 데이터 없을 때도 레이아웃 유지
               <div className={styles.imgPlaceholder} />
             )}
           </div>
+
           <div className={styles.text}>
-            <h1>💿 {albumDetail.name ?? "—"}</h1>
-            <p>타이틀 -  &nbsp;{albumDetail.title ?? "—"}</p>
-            <p>발매일 -  &nbsp;{albumDetail.releaseDate ?? "—"}</p>
+            {/* 앨범 선택 */}
+            <select
+              value={selectedAlbumId ?? ""}
+              onChange={(e) =>
+                setSelectedAlbumId(e.target.value ? Number(e.target.value) : null)
+              }
+              className={styles.albumSelect}
+            >
+              {uniqueAlbumList.length === 0 ? (
+                <option value="">앨범이 없어요</option>
+              ) : (
+                uniqueAlbumList.map((a) => (
+                  <option key={a.albumId} value={a.albumId}>
+                    {a.albumname} ({a.Releasedate ?? "-"})
+                  </option>
+                ))
+              )}
+            </select>
+
+            <h1>💿 {albumDetail?.name ?? "—"}</h1>
+            <p>타이틀 - &nbsp;{albumDetail?.title?? "—"}</p>
+            <p>발매일 - &nbsp;{albumDetail?.releaseDate ?? "—"}</p>
           </div>
-          <button className={styles.homeIcon} onClick={goIndex} aria-label="홈으로">
+
+          <button
+            className={styles.homeIcon}
+            onClick={goIndex}
+            aria-label="홈으로"
+          >
             <FontAwesomeIcon icon={faHouse} size="2xl" />
           </button>
         </div>
-      </section> 
+      </section>
 
-      <section style={{ position: "relative"}}>
+      <section style={{ position: "relative" }}>
         {pageLoading && (
-          <Spinners size={24} label="유튜브 불러오는 중..." showLabel color={brandColor} position="container" />
+          <Spinners
+            size={24}
+            label="유튜브 불러오는 중..."
+            showLabel
+            color={brandColor}
+            position="container"
+          />
         )}
         <ContentTable
           title="유튜브"
           iconList={[faYoutube]}
           data={albumDetail?.Youtube || []}
-        />
-      </section>
-
-      <section style={{ position: "relative"}}>
-        {pageLoading && (
-          <Spinners size={24} label="음악방송 불러오는 중..." showLabel color={brandColor} position="container" />
-        )}
-        <ContentTable
-          title="음악방송"
-          iconList={[faMusic, faTv]}
-          data={albumDetail?.musicbroadcast || []}
-        />
-      </section>
-
-      <section style={{ position: "relative"}}>
-        {pageLoading && (
-          <Spinners size={24} label="직캠 불러오는 중..." showLabel color={brandColor} position="container" />
-        )}
-        <ContentTable
-          title="음악방송 - 직캠"
-          iconList={[faVideo]}
-          data={albumDetail?.fancam || [] }
+          emptyText="공개된 유튜브 콘텐츠가 없어요 📺"
         />
       </section>
 
       <section style={{ position: "relative" }}>
         {pageLoading && (
-          <Spinners size={24} label="라디오 불러오는 중..." showLabel color={brandColor} position="container" />
+          <Spinners
+            size={24}
+            label="음악방송 불러오는 중..."
+            showLabel
+            color={brandColor}
+            position="container"
+          />
+        )}
+        <ContentTable
+          title="음악방송"
+          iconList={[faMusic, faTv]}
+          data={albumDetail?.musicbroadcast || []}
+          emptyText="음악방송 출연 영상이 아직 없어요 🎤"
+        />
+      </section>
+
+      <section style={{ position: "relative" }}>
+        {pageLoading && (
+          <Spinners
+            size={24}
+            label="직캠 불러오는 중..."
+            showLabel
+            color={brandColor}
+            position="container"
+          />
+        )}
+        <ContentTable
+          title="음악방송 - 직캠"
+          iconList={[faVideo]}
+          data={albumDetail?.fancam || []}
+          emptyText="공개된 직캠 영상이 없어요 🎥"
+        />
+      </section>
+
+      <section style={{ position: "relative" }}>
+        {pageLoading && (
+          <Spinners
+            size={24}
+            label="라디오 불러오는 중..."
+            showLabel
+            color={brandColor}
+            position="container"
+          />
         )}
         <ContentTable
           title="라디오"
           iconList={[faRadio]}
           data={albumDetail?.radio || []}
+          emptyText="라디오 출연 기록이 아직 없어요 📻"
         />
       </section>
 
-      <section style={{ position: "relative"}}>
+      <section style={{ position: "relative" }}>
         {pageLoading && (
-          <Spinners size={24} label="TV프로그램 불러오는 중..." showLabel color={brandColor} position="container" />
+          <Spinners
+            size={24}
+            label="TV프로그램 불러오는 중..."
+            showLabel
+            color={brandColor}
+            position="container"
+          />
         )}
         <ContentTable
           title="TV프로그램"
           iconList={[faTv]}
           data={albumDetail?.tvshow || []}
+          emptyText="TV 프로그램 출연 정보가 없어요 📺"
         />
       </section>
     </div>
-  )
+  );
 }
 
-export default AlbumPage
+export default AlbumPage;

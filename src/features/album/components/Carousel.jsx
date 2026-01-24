@@ -35,7 +35,7 @@ function Carousel( {artist} ) {
                   onClick={ () => {goTo(`/album/${data.group}`, {group:data.group})
                 }}>
                   <img 
-                    src={`https://raw.githubusercontent.com/yeonhee2/project_data/refs/heads/main/cover/${data.group}.jpg`} 
+                    src={data.coverUrl}
                     alt={`${data.group} cover`}
                     loading="lazy"
                     decoding="async"
