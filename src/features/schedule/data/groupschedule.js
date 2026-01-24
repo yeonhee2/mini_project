@@ -1,25 +1,30 @@
-function gpskd(schedule) {
-  const event = ([])
+function gpskd(scheduleDto) {
+  const sd =
+    (Array.isArray(scheduleDto?.sd) && scheduleDto.sd) ||
+    (Array.isArray(scheduleDto?.schedules) && scheduleDto.schedules) ||
+    [];
 
-  for(let i = 0 ; i< schedule.sd.length; i++ ) {
-    if(schedule.sd[i].cast === schedule.group){
-      event.push( {
-        title: schedule.sd[i].name,
-        start: schedule.sd[i].gpsdate,
-        color : schedule.sd[i].color,
-        type : schedule.sd[i].type
-      })
-    } else {
-      event.push( {
-        title: `${schedule.sd[i].name} | ${schedule.sd[i].cast}` ,
-        start: schedule.sd[i].gpsdate,
-        color : schedule.sd[i].color,
-        type : schedule.sd[i].type
-      })
-    }
+  const group = scheduleDto?.group;
+  const events = [];
+
+  for (const it of sd) {
+    const start = it?.gpsdate || it?.scheduleDate || it?.date;
+    const name = it?.name || it?.scheduleName || it?.title;
+    if (!start || !name) continue;
+
+    const cast = it?.cast || it?.castName || group;
+    const color = it?.color || "#00B6F0";
+    const type = it?.type || "S";
+
+    events.push({
+      title: cast === group ? name : `${name} | ${cast}`,
+      start,
+      color,
+      type,
+    });
   }
 
-  return event
+  return events;
 }
 
-export default gpskd
+export default gpskd;

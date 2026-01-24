@@ -1,15 +1,25 @@
-function albumlist( album ) {
-  const event = ([])
-  for(let i=0; i<album.music.length; i++) {
+function albumlist(albumDto) {
+  const music = Array.isArray(albumDto?.music) ? albumDto.music : [];
+
+  const event = [];
+  for (const it of music) {
+    if (!it?.Releasedate || !it?.albumname) continue;
+
+    const who = it?.subjectName || albumDto?.group || "UNKNOWN";
+
     event.push({
-      title: `${album.music[i].groupsolo} | ${album.music[i].albumname} 📀`,
-      start: album.music[i].Releasedate,
-      color: album.music[i].color,
-      type: album.music[i].type
-    })
+      title: `${who} | ${it.albumname} 📀`,
+      start: it.Releasedate,
+      color: it.color,
+      type: it.type || "R",
+      extendedProps: {
+        groupsolo: it.groupsolo,      // SOLO/GROUP/UNIT 뱃지용
+        subjectName: it.subjectName,  // ✅ 확인용
+      },
+    });
   }
 
-  return event
+  return event;
 }
 
-export default albumlist
+export default albumlist;
