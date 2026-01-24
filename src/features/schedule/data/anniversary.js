@@ -1,9 +1,15 @@
 function annivers(group = {}) {
   const events = [];
-  const now = new Date();
-  const currentYear = now.getFullYear();
+  const currentYear = new Date().getFullYear();
 
-  // yyyy-mm-dd로 포맷
+  const pick = (obj, keys) => {
+    for (const k of keys) {
+      const v = obj?.[k];
+      if (v !== undefined && v !== null && String(v).trim() !== "") return v;
+    }
+    return null;
+  };
+
   const fmt = (d) => {
     const yyyy = d.getFullYear();
     const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -11,91 +17,77 @@ function annivers(group = {}) {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  // 같은 월/일 유지한 채 연도만 교체 (윤년 보정)
-  const sameMonthDayThisYear = (iso) => {
+  const toThisYear = (iso) => {
     if (!iso) return null;
     const base = new Date(iso);
     if (isNaN(base)) return null;
+
     const d = new Date(base);
     d.setFullYear(currentYear);
-    // 2/29 → 평년엔 2/28로 보정
-    if (base.getMonth() === 1 && base.getDate() === 29 && d.getMonth() === 1 && d.getDate() === 28) {
-      // ok: JS가 자동 보정함(3/1로 넘어가면 하루 빼기)
+
+    // 2/29 보정
+    if (base.getMonth() === 1 && base.getDate() === 29 && d.getMonth() === 2) {
+      d.setDate(0); // 2/28
     }
     return fmt(d);
   };
 
-  // 올해 주년 수 계산 (올해 기념일 기준)
-  const getAnnivYears = (iso) => {
-    if (!iso) return null;
+  const annivYears = (iso) => {
     const start = new Date(iso);
-    if (isNaN(start)) return null;
-    const years = currentYear - start.getFullYear();
-    return years;
+    if (isNaN(start)) return 0;
+    return Math.max(0, currentYear - start.getFullYear());
   };
 
-  // 1) 데뷔 주년
-  if (group.debut) {
-    const debutDateThisYear = sameMonthDayThisYear(group.debut);
-    const debutYears = getAnnivYears(group.debut);
-    const debutLabel = debutYears > 0 ? `${debutYears}주년` : ""; // 0주년이면 표시 생략
+  const groupName = pick(group, ["group", "groupName", "name"]);
+  const groupColor = pick(group, ["color", "groupColor"]) || "#00B6F0";
 
-    events.push({
-      title: debutLabel
-        ? `${group.group} 데뷔 ${debutLabel} 🎤`
-        : `데뷔 🎤`,
-      start: debutDateThisYear,
-      color: group.color,
-      type: "A", // 기념일은 A로 고정 추천
-      extendedProps: {
-        kind: "debut",
-        since: group.debut,
-        years: Math.max(0, debutYears ?? 0),
-        label: debutLabel || "데뷔",
-      },
-    });
-  }
-
-  // 2) 멤버 생일 (그대로 유지)
-  if (Array.isArray(group.member)) {
-    for (let i = 0; i < group.member.length; i++) {
-      const m = group.member[i];
-      const bdayThisYear = sameMonthDayThisYear(m?.birthday);
+  // ✅ 데뷔일 키 후보들
+  const debut = pick(group, ["debut", "debutDate", "debut_date"]);
+  if (debut) {
+    const start = toThisYear(debut);
+    if (start) {
+      const years = annivYears(debut);
       events.push({
-        title: `🎂HAPPY ${m?.name} DAY🎂`,
-        start: bdayThisYear,
-        color: m?.color || group.color,
+        title: years > 0 ? `${groupName} 데뷔 ${years}주년 🎤` : `${groupName} 데뷔 🎤`,
+        start,
+        color: groupColor,
         type: "A",
-        extendedProps: {
-          kind: "birthday",
-          name: m?.name,
-          since: m?.birthday,
-        },
       });
     }
   }
 
-  // 3) 팬클럽 주년
-  if (group.fanclupdate) {
-    const fcDateThisYear = sameMonthDayThisYear(group.fanclupdate);
-    const fcYears = getAnnivYears(group.fanclupdate);
-    const fcLabel = fcYears > 0 ? `${fcYears}주년` : ""; // 0주년이면 생략
+  // ✅ 멤버 생일 (member / members 둘 다)
+  const members = Array.isArray(group?.member) ? group.member : Array.isArray(group?.members) ? group.members : [];
+  for (const m of members) {
+    const bday = pick(m, ["birthday", "birth", "birthDate"]);
+    const start = toThisYear(bday);
+    if (!start) continue;
+
+    const name = pick(m, ["name", "memberName"]);
+    const color = pick(m, ["color", "memberColor"]) || groupColor;
 
     events.push({
-      title: fcLabel
-        ? `${group.group} - ${group.fanclupname} ${fcLabel} ♡`
-        : `${group.group} - ${group.fanclupname} ♡`,
-      start: fcDateThisYear,
-      color: group.color,
+      title: `🎂HAPPY ${name} DAY🎂`,
+      start,
+      color,
       type: "A",
-      extendedProps: {
-        kind: "fanclub",
-        since: group.fanclupdate,
-        years: Math.max(0, fcYears ?? 0),
-        label: fcLabel || "결성",
-        fanclub: group.fanclupname,
-      },
     });
+  }
+
+  // 팬클럽 결성일 키 후보들
+  const fanDate = pick(group, ["fanclubdate", "fanclubDate", "fanclub_date", "fanclupdate"]);
+  const fanName = pick(group, ["fanclubname", "fanclubName", "fanclub_name", "fanclupname"]);
+  if (fanDate) {
+    const start = toThisYear(fanDate);
+    if (start) {
+      const years = annivYears(fanDate);
+      events.push({
+        title: years > 0 ? `${groupName} - ${fanName} ${years}주년 ♡` : `${groupName} - ${fanName} ♡`,
+        start,
+        color: groupColor,
+        type: "A",
+      });
+    }
   }
 
   return events;

@@ -5,46 +5,60 @@ import CalendarShell from "../components/calendar/CalendarShell";
 import { normalizeEvents } from "../../../utill/calendar/normalizeEvents";
 
 import data from "../../../utill/date.js";
-import albums from "../../../utill/albumdata.js";
 import concerts from "../../../utill/concertdata.js";
 
 export default function Calendars({ artist, album, concert }) {
-  // 메인 페이지용 이벤트 구성
+  // ✅ 메인 이벤트: 데뷔/생일/기념일 + 콘서트 + 앨범발매
   const events = useMemo(() => {
     const raw = [
       ...(data(artist) || []),
-      ...(albums(album) || []),
       ...(concerts(concert) || []),
+      ...(buildAlbumReleaseEvents(album) || []), // 여기만 추가
     ];
     return normalizeEvents(raw);
   }, [artist, album, concert]);
 
-  // 색상 범례(지금 너가 쓰던 로직 유지)
+  // 메인 페이지 색상 범례: 그룹 + (콘서트에 등장한) 유닛
   const colorLegend = useMemo(() => {
-    const map = new Map();
+    // 같은 label 중복 제거용
+    const labelToColor = new Map();
 
-    (artist || []).forEach((a) => {
-      if (a?.group && a?.color) map.set(a.group, a.color);
-    });
+    // 같은 color 중복 제거용 (같은 색이면 첫 label만 남김)
+    const usedColors = new Set();
 
-    (concert || []).forEach((c) => {
-      if (Array.isArray(c.concertdate)) {
-        c.concertdate.forEach((cd) => {
-          const key = cd.artistname || c.group;
-          if (key && cd.color) map.set(key, cd.color);
-        });
+    const add = (label, color) => {
+      const l = (label || "").trim();
+      const c = (color || "").trim();
+      if (!l || !c) return;
+
+      // 같은 색이면 중복 제거 (원하면 이 줄 빼면 "라벨 중복만 제거"로 바뀜)
+      if (usedColors.has(c)) return;
+
+      if (!labelToColor.has(l)) {
+        labelToColor.set(l, c);
+        usedColors.add(c);
       }
+    };
+
+    // 1) 그룹 색상: artists에서
+    (artist || []).forEach((g) => {
+      add(g?.group || g?.groupName, g?.color);
     });
 
-    (album || []).forEach((al) => {
-      (al.music || []).forEach((m) => {
-        const key = m.groupsolo || al.group || m.albumname;
-        if (key && m.color && !map.has(key)) map.set(key, m.color);
+    // 2) 유닛 색상: concerts에서 (unit 콘서트는 artistname이 유닛명으로 내려오게 했었지)
+    // concert: List<FrontConcertDto>
+    // dto: { group, concertdate:[{artistname,color,...}] }
+    (concert || []).forEach((cg) => {
+      const list = Array.isArray(cg?.concertdate) ? cg.concertdate : [];
+      list.forEach((it) => {
+        // 유닛이면 it.artistname = "MISAMO" 형태로 내려오게 DTO에서 만들었음
+        add(it?.artistname, it?.color);
       });
     });
 
-    return Array.from(map, ([label, color]) => ({ label, color }));
-  }, [artist, album, concert]);
+    return Array.from(labelToColor, ([label, color]) => ({ label, color }));
+  }, [artist, concert]);
+
 
   const typeLegend = [
     { code: "S", label: "Show / 공연·방송" },
@@ -54,7 +68,6 @@ export default function Calendars({ artist, album, concert }) {
     { code: "T", label: "Etc / 기타" },
   ];
 
-  // 메인 페이지 테마(기존 #00B6F0 유지)
   const theme = {
     headerBg: "#00B6F0",
     headerText: "#1A1A1A",
@@ -72,4 +85,26 @@ export default function Calendars({ artist, album, concert }) {
       monthOnly={false}
     />
   );
+}
+
+/** 백에서 내려온 album 리스트를 "발매일 이벤트"로 변환 */
+function buildAlbumReleaseEvents(albumDtoList) {
+  const list = Array.isArray(albumDtoList) ? albumDtoList : [];
+  const events = [];
+
+  for (const g of list) {
+    const group = g?.group;
+    const music = Array.isArray(g?.music) ? g.music : [];
+    for (const it of music) {
+      if (!group || !it?.Releasedate || !it?.albumname) continue;
+      events.push({
+        title: `${it.subjectName} | ${it.albumname} 📀`,
+        start: it.Releasedate,
+        color: it.color,
+        type: it.type || "R",
+        extendedProps: { group },
+      });
+    }
+  }
+  return events;
 }

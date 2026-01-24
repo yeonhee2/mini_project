@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faInstagram, faXTwitter, faYoutube, faTiktok } from '@fortawesome/free-brands-svg-icons';
 import { faShop, faUsersRectangle } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import styles from "../styles/ArtistPage.module.css";
@@ -66,6 +66,11 @@ function ArtistPage ( {group, performance, suggest, album, schedule, memschedule
           {group?.youtube && (
             <a href={group.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
               <FontAwesomeIcon icon={faYoutube} size="2x" />
+            </a>
+          )}
+          {group?.tiktok && (
+            <a href={group.tiktok} target="_blank" rel="noopener noreferrer"aria-label="TikTok">
+              <FontAwesomeIcon icon={faTiktok} size="2x" />
             </a>
           )}
           {group?.x && (

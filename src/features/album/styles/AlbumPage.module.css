@@ -15,6 +15,15 @@
   color: var(--ap-text);
 }
 
+.albumSelect{
+  width: 100%;
+  max-width: 320px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  margin-bottom: 10px;
+}
 /* 상단 카드 */
 .information {
   position: relative;
