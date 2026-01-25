@@ -7,23 +7,16 @@ import { normalizeEvents } from "../../../utill/calendar/normalizeEvents";
 import data from "../../../utill/date.js";
 import concerts from "../../../utill/concertdata.js";
 
-export default function Calendars({ artist, album, concert, onReady }) {
+export default function Calendars({ artist, album, concert }) {
   // 메인 이벤트: 데뷔/생일/기념일 + 콘서트 + 앨범발매
   const events = useMemo(() => {
     const raw = [
       ...(data(artist) || []),
       ...(concerts(concert) || []),
-      ...(buildAlbumReleaseEvents(album) || []),
+      ...(buildAlbumReleaseEvents(album) || []), // 여기만 추가
     ];
-    const normalized = normalizeEvents(raw);
-    
-    // 이벤트 데이터가 구성되면 부모에게 알림
-    if (normalized.length > 0) {
-      onReady();
-    }
-    
-    return normalized;
-  }, [artist, album, concert, onReady]);
+    return normalizeEvents(raw);
+  }, [artist, album, concert]);
 
   // 메인 페이지 색상 범례: 그룹 + (콘서트에 등장한) 유닛
   const colorLegend = useMemo(() => {
