@@ -14,42 +14,43 @@ function MainPage({ artist, album, concert}) {
     setPageTitle("Idol Note")
   },[])
 
+  // 데이터 준비 여부(시간이 아니라 실제 데이터 기준)
+  const hasArtist = (artist?.length ?? 0) > 0;
+  const hasCalendarData = hasArtist || (album?.length ?? 0) > 0 || (concert?.length ?? 0) > 0;
+
+  // 데이터가 바뀌면 ready 다시 false (그룹 추가/변경 등 대비)
   useEffect(() => {
-    if (artist?.length) {
-      const t = setTimeout(() => setCarouselLoading(false), 1200);
-      return () => clearTimeout(t);
-    }
-  }, [artist]);
+    setCarouselReady(false);
+  }, [hasArtist]);
 
   useEffect(() => {
-    if (artist?.length || album?.length || concert?.length) {
-      const t = setTimeout(() => setCalendarLoading(false), 1200);
-      return () => clearTimeout(t);
-    }
-  }, [artist, album, concert]);
+    setCalendarReady(false);
+  }, [hasCalendarData]);
+
+  const showCarouselSpinner = !hasArtist || !carouselReady;
+  const showCalendarSpinner = !hasCalendarData || !calendarReady;
 
   return(
-    <div style={{marginBottom: '180px'}} >
+    <div style={{ marginBottom: "180px" }}>
       <section style={{ position: "relative", minHeight: 220 }}>
-        {carouselLoading ? (
-          <Spinners size={24} label="이미지 불러오는중.." showLabel position="container"/>
+        {showCarouselSpinner ? (
+          <Spinners size={24} label="이미지 불러오는중.." showLabel position="container" />
         ) : (
-          <Carousel 
-            artist={artist} 
-            onReady={() => setCarouselLoading(false)}
-          />
-        ) }
-        {calendarLoading ? (
-          <Spinners size={25} label="일정 불러오는중.." showLabel position="container"/>
+          <Carousel artist={artist} onReady={() => setCarouselReady(true)} />
+        )}
+
+        {showCalendarSpinner ? (
+          <Spinners size={25} label="일정 불러오는중.." showLabel position="container" />
         ) : (
-          <Calendars 
-            artist={artist} 
-            album={album} 
+          <Calendars
+            artist={artist}
+            album={album}
             concert={concert}
-            onReady={() => setCalendarLoading(false)}
+            onReady={() => setCalendarReady(true)}
           />
-        ) }
+        )}
       </section>
+
       <Footer />
     </div>
   )

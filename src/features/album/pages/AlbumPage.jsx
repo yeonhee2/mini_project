@@ -30,7 +30,7 @@ function AlbumPage() {
     const map = new Map();
 
     for (const a of albumList) {
-      // ✅ GROUP만
+      // GROUP만
       if (a?.groupsolo !== "GROUP") continue;
 
       if (a?.albumId == null) continue;
