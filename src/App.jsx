@@ -7,14 +7,6 @@ import { useLocation } from 'react-router-dom'
 import { frontApi } from '@/api/frontApi'
 import Spinners from '@/components/ui/Spinner'
 
-// 타임아웃 유틸 (Render free cold start 대비)
-function withTimeout(promise, ms = 8000) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms)),
-  ]);
-}
-
 function App() {
   const [artist, setArtist] = useState([]);
   const [album, setAlbum] = useState([]);
@@ -32,33 +24,23 @@ function App() {
   useEffect(() => {
     let alive = true;
 
-    const initData = async () => {
-      // 1) 워밍업(첫 요청)만 짧게 시도 — 오래 걸리면 포기하고 UI는 그냥 보여줌
-      setBooting(true);
-      try {
-        await withTimeout(frontApi.getAlbums(), 6000); // 6초만 기다림
-      } catch (e) {
-        // timeout 나도 괜찮음 (UI는 먼저 띄우고 데이터는 계속 시도)
-      } finally {
-        if (alive) setBooting(false);
-      }
+    const safeSet = (setter) => (data) => alive && setter(data);
 
-      // 2) 실제 데이터는 “각각” 독립적으로 로딩(한 개가 느려도 다른 건 먼저 채워짐)
-      const safeSet = (setter) => (data) => alive && setter(data);
+    setBooting(true);
 
-      frontApi.getArtists().then((r) => r?.ok && safeSet(setArtist)(r.data));
-      frontApi.getAlbums().then((r) => r?.ok && safeSet(setAlbum)(r.data));
-      frontApi.getConcerts().then((r) => r?.ok && safeSet(setConcert)(r.data));
-      frontApi.getPlaylists().then((r) => r?.ok && safeSet(setArtistPlayList)(r.data));
-      frontApi.getGroupSchedules().then((r) => r?.ok && safeSet(setGroupEvent)(r.data));
-      frontApi.getMemberSchedules().then((r) => r?.ok && safeSet(setMemEvent)(r.data));
-    };
+    // 워밍업 + 헤더 빨리 채우기(체감 속도↑)
+    frontApi.getArtists()
+      .then((r) => r?.ok && safeSet(setArtist)(r.data))
+      .finally(() => alive && setBooting(false));
 
-    initData();
+    // 나머지는 병렬로 “각자” 채우기
+    frontApi.getAlbums().then((r) => r?.ok && safeSet(setAlbum)(r.data));
+    frontApi.getConcerts().then((r) => r?.ok && safeSet(setConcert)(r.data));
+    frontApi.getPlaylists().then((r) => r?.ok && safeSet(setArtistPlayList)(r.data));
+    frontApi.getGroupSchedules().then((r) => r?.ok && safeSet(setGroupEvent)(r.data));
+    frontApi.getMemberSchedules().then((r) => r?.ok && safeSet(setMemEvent)(r.data));
 
-    return () => {
-      alive = false;
-    };
+    return () => { alive = false; };
   }, []);
 
   return (
