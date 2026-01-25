@@ -7,12 +7,13 @@ import Spinners from "../components/ui/Spinner"
 
 
 function MainPage({ artist, album, concert}) {
-  const [carouselReady, setCarouselReady] = useState(false);
-  const [calendarReady, setCalendarReady] = useState(false);
-  
   useEffect(() => {
     setPageTitle("Idol Note")
   },[])
+  
+  const [carouselReady, setCarouselReady] = useState(false);
+  const [calendarReady, setCalendarReady] = useState(false);
+  
 
   // 데이터 준비 여부(시간이 아니라 실제 데이터 기준)
   const hasArtist = (artist?.length ?? 0) > 0;
