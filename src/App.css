@@ -3,3 +3,63 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* 서버 부팅 토스트 알림 스타일 */
+.booting-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 220px;
+  padding: 12px 24px;
+  background: rgba(33, 37, 41, 0.85); /* 다크 모드 스타일 */
+  color: #ffffff;
+  border-radius: 50px; /* 캡슐 모양 */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px); /* 배경 블러 */
+  -webkit-backdrop-filter: blur(10px); /* 사파리 대응 */
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: toastFadeUp 0.5s ease-out; /* 등장 애니메이션 */
+}
+
+.booting-toast-icon {
+  margin-right: 12px;
+  display: flex;
+}
+
+.booting-toast-text {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* 등장 애니메이션: 아래에서 위로 살짝 올라오며 나타남 */
+@keyframes toastFadeUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* 모바일 대응: 화면이 작을 때는 조금 더 아래로 붙임 */
+@media (max-width: 768px) {
+  .booting-toast {
+    bottom: 20px;
+    padding: 10px 18px;
+    min-width: 180px;
+  }
+  .booting-toast-text {
+    font-size: 13px;
+  }
+}

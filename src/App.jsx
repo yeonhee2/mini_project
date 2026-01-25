@@ -49,18 +49,16 @@ function App() {
 
       {/* App 전체 막지 말고, 위에만 “워밍업 오버레이” */}
       {booting && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            display: "grid",
-            placeItems: "center",
-            background: "rgba(255,255,255,0.55)",
-            zIndex: 9999,
-            pointerEvents: "none", // 사용자는 클릭/스크롤 계속 가능
-          }}
-        >
-          <Spinners label="서버 깨우는 중..." showLabel />
+        <div className="booting-toast">
+          <div className="booting-toast-icon">
+            {/* Spinner 컴포넌트가 color prop을 받지 않는다면 
+              해당 컴포넌트 내부 CSS에서 흰색으로 처리해야 할 수 있습니다. 
+            */}
+            <Spinners size={18} color="#ffffff" /> 
+          </div>
+          <span className="booting-toast-text">
+            서버를 연결하고 있습니다...
+          </span>
         </div>
       )}
 
