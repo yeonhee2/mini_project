@@ -7,8 +7,8 @@ import Spinners from "../components/ui/Spinner"
 
 
 function MainPage({ artist, album, concert}) {
-  const [carouselLoading, setCarouselLoading] = useState(true);
-  const [calendarLoading, setCalendarLoading] = useState(true);
+  const [carouselReady, setCarouselReady] = useState(false);
+  const [calendarReady, setCalendarReady] = useState(false);
   
   useEffect(() => {
     setPageTitle("Idol Note")
