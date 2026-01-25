@@ -3,9 +3,8 @@ import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import UseNavi from '../../../hooks/UseNavi';
-import { useEffect } from 'react';
 
-function Carousel( {artist, onReady} ) {
+function Carousel( {artist} ) {
   const {goTo} = UseNavi()
   
   const settings = {
@@ -22,13 +21,6 @@ function Carousel( {artist, onReady} ) {
     lazyLoad: "ondemand",      // 이미지 많은 경우 로딩 최적화
     cssEase: "linear"
   };
-
-  // 데이터가 로드되면 부모에게 알림
-  useEffect(() => {
-    if (artist && artist.length > 0) {
-      onReady(); 
-    }
-  }, [artist, onReady]);
   
   return (
     
